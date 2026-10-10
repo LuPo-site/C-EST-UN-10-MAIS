@@ -1,0 +1,2130 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#8b5cf6">
+<title>C'est un 10 mais…</title>
+<style>
+:root{--accent:#8b5cf6;--accent2:#ec4899;--bg:#09090f;--panel:rgba(255,255,255,.075);--text:#f8fafc;--muted:#a1a1aa;--border:rgba(255,255,255,.12);--shadow:0 25px 70px rgba(0,0,0,.45)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(circle at 15% 10%,color-mix(in srgb,var(--accent) 20%,transparent),transparent 35%),radial-gradient(circle at 85% 80%,color-mix(in srgb,var(--accent2) 16%,transparent),transparent 35%),var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;color:inherit}
+.app{min-height:100vh;display:flex;flex-direction:column}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;background:rgba(9,9,15,.72);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.logo{font-weight:900;letter-spacing:-.04em}.logo span{color:var(--accent)}.top-actions{display:flex;gap:8px}.icon-btn,.ghost{background:var(--panel);border:1px solid var(--border);padding:10px 12px;border-radius:13px}.icon-btn:hover,.ghost:hover{border-color:color-mix(in srgb,var(--accent) 70%,white);transform:translateY(-1px)}
+main{width:min(1180px,100%);margin:auto;padding:34px 18px 100px;flex:1}.screen{display:none;animation:rise .4s ease}.screen.active{display:block}@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.hero{text-align:center;padding:55px 0 30px}.eyebrow{text-transform:uppercase;letter-spacing:.2em;color:var(--accent);font-size:.78rem;font-weight:800}.hero h1{font-size:clamp(3rem,9vw,7rem);line-height:.88;margin:14px 0;letter-spacing:-.07em}.hero h1 em{font-style:normal;color:var(--accent)}.hero p{max-width:650px;margin:20px auto;color:var(--muted);font-size:1.05rem}
+.btn{padding:13px 18px;border-radius:15px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 12px 35px color-mix(in srgb,var(--accent) 30%,transparent);transition:.18s}.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}.btn.secondary{background:var(--panel);box-shadow:none;border:1px solid var(--border)}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.panel{background:var(--panel);border:1px solid var(--border);border-radius:24px;padding:20px;box-shadow:var(--shadow);backdrop-filter:blur(18px)}.panel h2,.panel h3{margin-top:0}.muted{color:var(--muted)}
+label{display:block;font-weight:700;margin:13px 0 7px}input,select,textarea{width:100%;background:rgba(0,0,0,.2);color:var(--text);border:1px solid var(--border);border-radius:13px;padding:12px;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--accent)}textarea{min-height:100px;resize:vertical}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{padding:9px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--border)}.chip.active{background:color-mix(in srgb,var(--accent) 28%,transparent);border-color:var(--accent)}
+#playersList{display:grid;gap:8px;margin:12px 0}.player-row{display:flex;align-items:center;gap:9px;background:rgba(0,0,0,.16);padding:9px;border-radius:13px}.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));font-weight:900}
+.game-layout{display:grid;grid-template-columns:220px 1fr;gap:20px}.players-panel{align-self:start}.player-card{display:flex;justify-content:space-between;gap:8px;padding:10px;border-bottom:1px solid var(--border)}.player-card:last-child{border-bottom:0}.turn{outline:2px solid var(--accent);border-radius:12px}
+.card-wrap{perspective:1200px}.game-card{min-height:470px;padding:38px;display:flex;flex-direction:column;justify-content:center;text-align:center;position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.045));border:1px solid rgba(255,255,255,.18);border-radius:32px;box-shadow:var(--shadow);transform-style:preserve-3d}.game-card.flip{animation:flip .55s ease}@keyframes flip{0%{transform:rotateY(0) scale(1)}45%{transform:rotateY(90deg) scale(.96)}100%{transform:rotateY(0) scale(1)}}.badge{display:inline-flex;margin:auto;padding:7px 11px;border-radius:999px;background:color-mix(in srgb,var(--accent) 22%,transparent);color:#fff;font-size:.78rem;font-weight:800}.game-card h2{font-size:clamp(2.2rem,6vw,4.6rem);line-height:1.02;margin:18px 0}.game-card .situation{font-size:clamp(1.15rem,2vw,1.45rem);color:#e4e4e7}.rating{display:grid;grid-template-columns:repeat(11,1fr);gap:7px;margin-top:18px}.rating button{aspect-ratio:1;border-radius:13px;background:var(--panel);border:1px solid var(--border);font-weight:900;font-size:1.05rem}.rating button:hover{background:var(--accent);transform:translateY(-3px)}.consequence{margin-top:18px;padding:18px;border-radius:18px;text-align:center;background:color-mix(in srgb,var(--accent) 13%,transparent);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);font-weight:900}.hidden{display:none!important}.game-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:15px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.stat{padding:18px;border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.045)}.stat b{font-size:1.7rem;display:block}.bar{height:9px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0}
+.modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px)}.modal.open{display:flex}.modal-inner{width:min(620px,100%);max-height:90vh;overflow:auto;background:#111119;border:1px solid var(--border);border-radius:25px;padding:22px;box-shadow:var(--shadow)}
+.palette{position:absolute;right:18px;top:62px;display:none;width:250px;padding:15px;background:#12121b;border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow)}.palette.open{display:block}.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.swatch{height:42px;border-radius:12px;border:2px solid transparent}.swatch.selected{border-color:white}.danger{background:#7f1d1d}.list-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+canvas{width:100%;height:260px;background:rgba(0,0,0,.12);border-radius:18px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;z-index:80;background:#181822;border:1px solid var(--border);padding:12px 16px;border-radius:14px;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+.confetti{position:fixed;top:-20px;width:8px;height:16px;z-index:70;animation:fall 1.5s linear forwards}@keyframes fall{to{transform:translate3d(var(--x),110vh,0) rotate(720deg);opacity:0}}
+@media(max-width:800px){.game-layout{grid-template-columns:1fr}.players-panel{order:2}.game-card{min-height:390px;padding:25px}.rating{gap:4px}.rating button{border-radius:9px}.topbar{padding:12px 14px}main{padding:24px 12px 80px}.hero{padding-top:30px}}
+
+/* ============================================================
+   RESPONSIVE MOBILE
+   PC INCHANGÉ
+   ============================================================ */
+
+@media (max-width:600px){
+
+  html,
+  body{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+  }
+
+  .app{
+    width:100%;
+    min-width:0;
+  }
+
+  /* BARRE DU HAUT */
+  .topbar{
+    width:100%;
+    padding:10px;
+    gap:8px;
+  }
+
+  .logo{
+    font-size:.92rem;
+    white-space:nowrap;
+  }
+
+  .top-actions{
+    gap:5px;
+    flex-shrink:0;
+  }
+
+  .icon-btn{
+    padding:8px 9px;
+    border-radius:11px;
+  }
+
+  /* CONTENU */
+  main{
+    width:100%;
+    max-width:100%;
+    margin:0;
+    padding:18px 10px 70px;
+  }
+
+  /* ACCUEIL */
+  .hero{
+    padding:24px 4px 22px;
+  }
+
+  .hero h1{
+    font-size:clamp(2.8rem,15vw,4.5rem);
+    line-height:.9;
+  }
+
+  .hero p{
+    font-size:.98rem;
+    line-height:1.5;
+  }
+
+  /* BOUTONS */
+  .actions{
+    width:100%;
+    gap:8px;
+  }
+
+  .actions .btn{
+    width:100%;
+  }
+
+  /* GRILLES */
+  .grid{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .panel{
+    padding:15px;
+    border-radius:18px;
+  }
+
+  /* JEU */
+  .game-layout{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+
+  .players-panel{
+    order:2;
+  }
+
+  .game-card{
+    min-height:330px;
+    padding:22px 14px;
+    border-radius:22px;
+  }
+
+  .game-card h2{
+    font-size:clamp(2rem,10vw,3.2rem);
+    overflow-wrap:anywhere;
+  }
+
+  .game-card .situation{
+    font-size:1.05rem;
+    line-height:1.45;
+  }
+
+  /* NOTES 0 → 10 */
+  .rating{
+    grid-template-columns:repeat(6,1fr);
+    gap:6px;
+  }
+
+  .rating button{
+    min-height:44px;
+    border-radius:10px;
+  }
+
+  /* ACTIONS DU JEU */
+  .game-actions{
+    flex-direction:column;
+  }
+
+  .game-actions .btn{
+    width:100%;
+  }
+
+  /* CHIPS */
+  .chips{
+    gap:6px;
+  }
+
+  .chip{
+    padding:8px 10px;
+    font-size:.9rem;
+  }
+
+  /* FENÊTRES */
+  .modal{
+    padding:10px;
+    align-items:flex-end;
+  }
+
+  .modal-inner{
+    width:100%;
+    max-height:88vh;
+    border-radius:20px 20px 0 0;
+    padding:17px;
+  }
+
+  /* PALETTE */
+  .palette{
+    position:fixed;
+    right:10px;
+    top:58px;
+    width:min(250px,calc(100vw - 20px));
+  }
+
+  /* EMPÊCHE LE ZOOM AUTOMATIQUE SUR IPHONE */
+  input,
+  select,
+  textarea{
+    font-size:16px;
+  }
+
+  /* STATISTIQUES */
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+
+  .stat{
+    padding:13px;
+  }
+
+  .stat b{
+    font-size:1.35rem;
+  }
+
+  /* LISTES */
+  .list-item{
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  #leaderboard .list-item > span:last-child{
+    width:100%;
+    font-size:.9rem;
+  }
+
+  /* GRAPHIQUE */
+  canvas{
+    width:100%;
+    height:220px;
+  }
+}
+
+
+/* ============================================================
+   TRÈS PETITS TÉLÉPHONES
+   ============================================================ */
+
+@media (max-width:380px){
+
+  .logo{
+    font-size:.82rem;
+  }
+
+  .icon-btn{
+    padding:7px 8px;
+  }
+
+  main{
+    padding-left:8px;
+    padding-right:8px;
+  }
+
+  .rating{
+    grid-template-columns:repeat(6,1fr);
+    gap:4px;
+  }
+
+  .rating button{
+    min-height:40px;
+    font-size:.95rem;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+}
+
+
+/* Mode Sans alcool : interface dédiée */
+.sober-controls{display:none;margin-top:16px;padding:18px;border:1px solid var(--border);border-radius:20px;background:rgba(255,255,255,.035)}
+.sober-controls.active{display:block}.sober-controls .chips{margin:10px 0 16px}.sober-controls .chip{min-height:42px}
+.sober-meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px;font-size:.9rem;color:var(--muted)}
+.progress-track{height:6px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden;margin:12px 0 18px}.progress-track span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
+@media(max-width:600px){.sober-controls{padding:13px}.sober-controls .game-actions{gap:8px}}
+
+/* Refonte premium du mode Sans alcool : défis liés à l'écart réel */
+.sober-controls{display:none;margin-top:18px;padding:20px;border:1px solid var(--border);border-radius:22px;background:linear-gradient(145deg,rgba(139,92,246,.12),rgba(236,72,153,.08))}
+.sober-controls.active{display:block}.sober-meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px;font-size:.92rem;color:var(--muted)}
+.sober-level{font-size:1.05rem;font-weight:900;margin:6px 0}.sober-explainer{color:var(--muted);font-size:.92rem;margin:0 0 16px}
+.sober-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0}.sober-pair.single-card{grid-template-columns:1fr}
+.sober-card{display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-height:205px;padding:18px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,.055);color:var(--text);box-shadow:0 12px 32px rgba(0,0,0,.12);cursor:pointer;transition:transform .18s,border-color .18s,background .18s}
+.sober-card:hover{transform:translateY(-3px);border-color:var(--accent)}.sober-card.action{background:linear-gradient(145deg,rgba(139,92,246,.2),rgba(139,92,246,.05))}.sober-card.truth{background:linear-gradient(145deg,rgba(236,72,153,.18),rgba(236,72,153,.05))}
+.sober-card .sober-icon{font-size:1.7rem;margin-bottom:12px}.sober-card .sober-type{font-size:.75rem;letter-spacing:.12em;font-weight:900;opacity:.8}.sober-card .sober-text{font-size:1rem;line-height:1.5;font-weight:750;margin-top:10px}
+.sober-reveal{padding:22px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,.07);text-align:center;margin:14px 0}.sober-reveal .sober-reveal-type{font-size:.78rem;letter-spacing:.12em;font-weight:900;color:var(--accent);margin-bottom:10px}.sober-reveal .sober-reveal-text{font-size:clamp(1.15rem,3vw,1.65rem);font-weight:850;line-height:1.45}
+.sober-controls .game-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.sober-controls .game-actions .btn{flex:1;min-width:135px}.sober-result-hidden{display:none!important}
+@media(max-width:600px){.sober-controls{padding:14px}.sober-pair{grid-template-columns:1fr}.sober-card{min-height:150px}.sober-controls .game-actions .btn{min-width:100%}}
+
+
+.play-options{display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.play-options.active{display:grid}
+.option-group{padding:16px;border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.035)}
+.option-group h3{margin:0 0 10px}.option-group .chips{gap:7px}.option-group .chip{flex:1}
+.play-style-badge{display:inline-flex;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.1);font-size:.75rem;font-weight:850;margin:0 4px 8px 0}
+@media(max-width:600px){.play-options{grid-template-columns:1fr}}
+
+
+.duel-inner{border-color:color-mix(in srgb,var(--accent) 55%,white);background:linear-gradient(145deg,#151323,#111119)}
+.duel-head{display:flex;align-items:center;gap:14px;margin-bottom:10px}.duel-head h2{margin:2px 0;font-size:2rem}
+.duel-icon{display:grid;place-items:center;width:58px;height:58px;border-radius:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));font-size:1.8rem;box-shadow:0 10px 30px color-mix(in srgb,var(--accent) 30%,transparent)}
+.duel-meta{display:flex;justify-content:space-between;gap:12px;margin:16px 0;font-weight:850}.duel-meta span:last-child{color:var(--accent)}
+.duel-question{font-size:clamp(1.25rem,4vw,1.8rem);font-weight:900;line-height:1.25;padding:20px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid var(--border)}
+.duel-options{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0}.duel-option{padding:14px;border-radius:13px;border:1px solid var(--border);background:rgba(255,255,255,.06);text-align:left;font-weight:750;min-height:52px}.duel-option:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 20%,transparent)}
+.duel-option:disabled{opacity:.55;cursor:default}.duel-result-title{font-size:1.65rem;font-weight:950;margin-top:8px}
+@media(max-width:600px){.duel-options{grid-template-columns:1fr}.duel-head h2{font-size:1.6rem}}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="logo">C'EST UN <span>10</span> MAIS…</div>
+  <div class="top-actions">
+    <button class="icon-btn" id="paletteBtn">🎨</button>
+    <button class="icon-btn" id="soundBtn">🔊</button>
+    <button class="icon-btn" id="settingsBtn">⚙️</button>
+  </div>
+  <div class="palette" id="palette">
+    <div class="muted" style="margin-bottom:10px">Thème</div>
+    <div class="swatches" id="swatches"></div>
+    <label>Couleur personnalisée</label><input id="customColor" type="color" value="#8b5cf6">
+  </div>
+</header>
+
+<main>
+<section id="home" class="screen active">
+  <div class="hero">
+    <div class="eyebrow">Le jeu de soirée</div>
+    <h1>C'est un <em>10</em><br>mais…</h1>
+    <p>Une carte. Une note de 0 à 10. Des duels, des défis et des retournements de situation.</p>
+    <div class="actions">
+      <button class="btn" onclick="showScreen('setup')">🎮 Nouvelle partie</button>
+      <button class="btn secondary" id="resumeBtn">▶️ Reprendre</button>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="panel"><h3>🃏 Des centaines de cartes et de défis</h3><p class="muted">Plusieurs ambiances, des défis variés et une pioche sans répétition immédiate.</p></div>
+    <div class="panel"><h3>🎨 Thèmes</h3><p class="muted">Personnalise les couleurs et sauvegarde ton style.</p></div>
+    <div class="panel"><h3>🎯 Défis ludiques</h3><p class="muted">Des conséquences amusantes, sans pénalité liée à l’alcool.</p></div>
+  </div>
+</section>
+
+<section id="setup" class="screen">
+  <h1>Préparer la partie</h1>
+  <div class="grid">
+    <div class="panel">
+      <h2>👥 Joueurs</h2>
+      <div style="display:flex;gap:8px"><input id="playerInput" placeholder="Prénom"><button class="btn" id="addPlayer">+</button></div>
+      <div id="playersList"></div>
+      <p class="muted">2 joueurs minimum recommandés.</p>
+    </div>
+    <div class="panel">
+      <h2>🎲 Mode</h2>
+      <div class="chips" id="modeChips">
+        <button class="chip active" data-mode="classic">Classique</button>
+        <button class="chip" data-mode="fast">Rapide</button>
+        <button class="chip" data-mode="party">Soirée</button>
+        <button class="chip" data-mode="sober">Sans alcool</button>
+      </div>
+      <label>Nombre de cartes</label><input id="rounds" type="number" min="3" max="100" value="10">
+      <label>Catégories</label>
+      <div class="chips" id="catChips">
+        <button class="chip active" data-cat="all">Toutes</button><button class="chip" data-cat="quotidien">Quotidien</button><button class="chip" data-cat="relation">Relations</button><button class="chip" data-cat="drôle">Drôle</button><button class="chip" data-cat="soirée">Soirée</button>
+      </div>
+      <div class="play-options">
+        <div class="option-group">
+          <h3>🎭 Ambiance</h3>
+          <div class="chips" id="playStyleChips">
+            <button class="chip active" data-style="friends">Entre potes</button>
+            <button class="chip" data-style="classic">Classique</button>
+            <button class="chip" data-style="couple">Couple</button>
+            <button class="chip" data-style="all">Tout mélangé</button>
+          </div>
+          <p class="muted" style="margin-bottom:0;font-size:.88rem">Choisis l’ambiance des cartes et des défis.</p>
+        </div>
+        <div class="option-group">
+          <h3>🃏 Type de carte</h3>
+          <div class="chips" id="playTypeChips">
+            <button class="chip active" data-playtype="both">Défis variés</button>
+            <button class="chip" data-playtype="action">Défis express</button>
+            <button class="chip" data-playtype="truth">Questions bonus</button>
+          </div>
+          <p class="muted" style="margin-bottom:0;font-size:.88rem">Les préférences définissent l’ambiance des défis bonus.</p>
+        </div>
+      </div>
+      <button class="btn" style="margin-top:16px;width:100%" id="startGame">🚀 Lancer la partie</button>
+    </div>
+  </div>
+</section>
+
+<section id="game" class="screen">
+  <div class="game-layout">
+    <aside class="panel players-panel"><h3>👥 Joueurs</h3><div id="gamePlayers"></div><div class="muted" id="roundInfo"></div></aside>
+    <div>
+      <div class="card-wrap"><article class="game-card" id="gameCard">
+        <span class="badge" id="cardType">NORMAL</span>
+        <div class="muted" id="cardNumber"></div>
+        <h2 id="cardTitle">C'est un 10 mais…</h2>
+        <div class="situation" id="cardSituation"></div>
+        <div class="muted" id="cardRule" style="margin-top:18px"></div>
+      </article></div>
+      <div class="panel" style="margin-top:15px">
+        <div style="text-align:center;font-weight:800">Note de <span id="currentPlayerName"></span></div>
+        <div class="muted" style="text-align:center;margin-top:6px">Score = écart avec la référence • moins de points = mieux</div>
+        <div class="rating" id="rating"></div>
+        <div class="consequence hidden" id="consequence"></div>
+        <div class="sober-controls" id="soberControls">
+          <div class="sober-meta"><span id="soberKindLabel">🎯 RÉSULTAT</span><span id="soberCounter">Écart : —</span></div>
+          <div class="sober-level" id="soberLevel">Niveau de défi</div>
+          <p class="sober-explainer" id="soberExplain">L'écart entre la note et la référence détermine le niveau des cartes.</p>
+          <div class="sober-pair" id="soberPair">
+            <button class="sober-card action" id="soberChooseAction"><span class="sober-icon">⚡</span><span class="sober-type">DÉFI EXPRESS</span><span class="sober-text" id="soberActionText">Choisis ce défi pour le révéler.</span></button>
+            <button class="sober-card truth" id="soberChooseTruth"><span class="sober-icon">🧠</span><span class="sober-type">QUESTION BONUS</span><span class="sober-text" id="soberTruthText">Choisis cette question bonus pour la révéler.</span></button>
+          </div>
+          <div class="sober-reveal sober-result-hidden" id="soberReveal"><div class="sober-reveal-type" id="soberRevealType">DÉFI</div><div class="sober-reveal-text" id="soberRevealText"></div></div>
+          <div class="game-actions">
+            <button class="btn secondary" id="soberOther">🔄 Autre carte</button>
+            <button class="btn secondary" id="soberPass">⏭️ Je passe</button>
+            <button class="btn" id="soberNextPlayer">👥 Joueur suivant</button>
+          </div>
+          <p class="muted" style="text-align:center;margin-bottom:0">Tout défi est facultatif. « Je passe » permet de continuer sans justification.</p>
+        </div>
+        <div class="game-actions" id="standardGameDéfis express">
+          <button class="btn secondary" id="nextCard">🎴 Nouvelle carte</button>
+          <button class="btn secondary" id="endGame">🏁 Terminer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="results" class="screen">
+  <div class="hero" style="padding-bottom:15px"><div class="eyebrow">Partie terminée</div><h1>🏆 Résultats</h1></div>
+  <div class="stats" id="resultStats"></div>
+  <div class="panel" style="margin-top:15px"><h2>Classement — moins de points = gagnant</h2><div id="leaderboard"></div></div>
+  <div class="panel" style="margin-top:15px"><h2>📊 Points d'écart par joueur</h2><canvas id="chart" width="900" height="260"></canvas></div>
+  <div class="actions" style="margin-top:18px"><button class="btn" id="shareBtn">📤 Partager</button><button class="btn secondary" onclick="showScreen('home')">🏠 Menu</button><button class="btn secondary" id="replayBtn">🔄 Rejouer</button></div>
+</section>
+
+<section id="custom" class="screen">
+  <h1>🃏 Mes cartes</h1>
+  <div class="panel">
+    <label>Texte de la situation</label><textarea id="customText" placeholder="…il mange toujours dans ton assiette."></textarea>
+    <div class="grid"><div><label>Catégorie</label><select id="customCat"><option>drôle</option><option>quotidien</option><option>relation</option><option>soirée</option></select></div><div><label>Type</label><select id="customType"><option>normal</option><option>débat</option><option>duel</option><option>groupe</option><option>joker</option></select></div></div>
+    <div class="grid">
+      <div>
+        <label>Réponse de référence (0-10)</label>
+        <input id="customTarget" type="number" min="0" max="10" step="1" value="5">
+      </div>
+      <div>
+        <label>Gravité</label>
+        <select id="customSeverity"><option value="light">Légère</option><option value="normal" selected>Normale</option><option value="hard">Très difficile</option></select>
+      </div>
+    </div>
+    <button class="btn" id="saveCustom">➕ Ajouter</button>
+  </div>
+  <div class="panel" style="margin-top:15px"><h2>Cartes personnalisées</h2><div id="customList"></div></div>
+  <button class="btn secondary" style="margin-top:15px" onclick="showScreen('home')">← Retour</button>
+</section>
+</main>
+
+
+<div class="modal" id="duelModal" role="dialog" aria-modal="true" aria-labelledby="duelTitle">
+  <div class="modal-inner duel-inner">
+    <div class="duel-head"><span class="duel-icon">⚡</span><div><div class="eyebrow">MODE RAPIDE</div><h2 id="duelTitle">Duel éclair</h2></div></div>
+    <p class="muted" id="duelIntro">Choisis un adversaire. Une question, deux joueurs, huit secondes chacun.</p>
+    <div id="duelSetup">
+      <label for="duelOpponent">Choisir un adversaire</label>
+      <select id="duelOpponent"></select>
+      <button class="btn" id="duelStart" style="width:100%;margin-top:12px">⚡ Lancer le duel</button>
+    </div>
+    <div id="duelPlay" class="hidden">
+      <div class="duel-meta"><span id="duelPlayers"></span><span id="duelTimer">8 s</span></div>
+      <div class="duel-question" id="duelQuestion"></div>
+      <div class="duel-options" id="duelOptions"></div>
+      <p class="muted" id="duelTurnInfo"></p>
+      <button class="btn secondary" id="duelSkip">Passer cette question</button>
+    </div>
+    <div id="duelResult" class="hidden">
+      <div class="duel-result-title" id="duelResultTitle"></div>
+      <p id="duelResultText"></p>
+      <button class="btn" id="duelContinue" style="width:100%">Continuer la partie</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+</div>
+
+<div class="modal" id="settingsModal"><div class="modal-inner">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h2>⚙️ Paramètres</h2><button class="icon-btn" onclick="closeSettings()">✕</button></div>
+  <label>Mode par défaut</label><select id="defaultMode"><option value="classic">Classique</option><option value="fast">Rapide</option><option value="party">Soirée</option><option value="sober">Sans alcool</option></select>
+  <label>Animations</label><select id="animations"><option value="on">Activées</option><option value="off">Désactivées</option></select>
+  <label>Nombre maximum de conséquences affichées</label><input id="maxPenalty" type="number" min="1" max="20" value="10">
+  <p class="muted">Toutes les conséquences restent ludiques : points, défis et duels, sans obligation de boire.</p>
+  <button class="btn" style="width:100%" id="saveSettings">Enregistrer</button>
+</div></div>
+
+<script>
+
+/* Utilitaires restaurés : ils avaient été omis dans la refonte, ce qui bloquait tout le JavaScript. */
+const $=id=>document.getElementById(id);
+
+const load=(k,d)=>{
+  try{
+    return JSON.parse(localStorage.getItem(k))??d;
+  }catch{
+    return d;
+  }
+};
+
+const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){/* Le jeu reste jouable si le navigateur bloque le stockage local. */}};
+
+function toast(t){
+  $("toast").textContent=t;
+  $("toast").classList.add("show");
+  setTimeout(()=>$("toast").classList.remove("show"),2200);
+}
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  $(id).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(id==="custom")renderCustom();
+}
+
+function beep(freq=440,dur=.08){
+  if(!state.sound)return;
+
+  try{
+    const c=new AudioContext();
+    const o=c.createOscillator();
+    const g=c.createGain();
+
+    o.frequency.value=freq;
+    o.connect(g);
+    g.connect(c.destination);
+    g.gain.value=.04;
+
+    o.start();
+    o.stop(c.currentTime+dur);
+  }catch{}
+}
+
+function confetti(){
+  if(state.settings.animations==="off")return;
+
+  for(let i=0;i<50;i++){
+    const e=document.createElement("i");
+    e.className="confetti";
+    e.style.left=Math.random()*100+"vw";
+    e.style.setProperty("--x",(Math.random()*300-150)+"px");
+    e.style.background=`hsl(${Math.random()*360} 90% 60%)`;
+    e.style.animationDelay=Math.random()*.3+"s";
+    document.body.appendChild(e);
+
+    setTimeout(()=>e.remove(),1900);
+  }
+}
+
+function applyTheme(name,a,b){
+  document.documentElement.style.setProperty("--accent",a);
+  document.documentElement.style.setProperty("--accent2",b);
+  state.theme=name;
+  save("theme",name);
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[c]));
+}
+
+function renderPlayers(){
+  $("playersList").innerHTML=state.players.map((p,i)=>`
+    <div class="player-row">
+      <span class="avatar">${p.name[0].toUpperCase()}</span>
+      <span style="flex:1">${escapeHtml(p.name)}</span>
+      <button class="ghost" onclick="removePlayer(${i})">✕</button>
+    </div>
+  `).join("");
+}
+
+function removePlayer(i){
+  state.players.splice(i,1);
+  renderPlayers();
+}
+
+function addPlayer(){
+  const n=$("playerInput").value.trim();
+
+  if(!n)return;
+
+  if(state.players.length>=12){
+    return toast("Maximum 12 joueurs.");
+  }
+
+  state.players.push({
+    name:n,
+    score:0,
+    penalties:0,
+    challenges:0,
+    jokers:0,
+    notes:[]
+  });
+
+  $("playerInput").value="";
+  renderPlayers();
+}
+
+
+
+/*
+ * ============================================================
+ * SYSTÈME DE RÉFÉRENCE DES CARTES
+ * ============================================================
+ *
+ * Chaque carte intégrée possède maintenant explicitement :
+ *
+ * [catégorie, type, texte, référence, gravité]
+ *
+ * La "référence" est une valeur de GAMEPLAY comprise entre 0 et 10.
+ *
+ * IMPORTANT :
+ * Ces valeurs ne représentent PAS une vérité scientifique,
+ * psychologique ou sociologique.
+ *
+ * Elles servent uniquement à fournir une référence commune
+ * entre les joueurs afin de calculer un écart.
+ *
+ * La distribution est volontairement répartie sur toute
+ * l'échelle 0–10 afin d'éviter que 5 devienne automatiquement
+ * la réponse optimale.
+ *
+ * Cette décision de conception tient compte du fait que les
+ * échelles de notation peuvent être affectées par des effets
+ * de tendance centrale, par le format de l'échelle et par
+ * différents "response styles".
+ *
+ * Références méthodologiques :
+ * - Weijters, Cabooter & Schillewaert (2010),
+ *   "The effect of rating scale format on response styles".
+ * - Douven (2018),
+ *   "A Bayesian perspective on Likert scales and central tendency".
+ * - Kulas & Stachowski (2009),
+ *   "Middle category endorsement in odd-numbered Likert response scales".
+ *
+ * Ces études servent uniquement à guider la conception de
+ * l'échelle du jeu. Elles ne déterminent aucune valeur de carte.
+ * ============================================================
+ */
+
+const defaultCards = [
+
+["quotidien","normal","il met trois jours à répondre aux messages.",4,"normal"],
+["drôle","normal","il connaît toutes les paroles des chansons ringardes.",8,"light"],
+["quotidien","normal","il arrive toujours avec 45 minutes de retard.",3,"normal"],
+["drôle","normal","il dit « du coup » toutes les deux phrases.",7,"light"],
+["relation","normal","il parle uniquement de son ex.",2,"hard"],
+["drôle","normal","il vole toujours les frites des autres.",6,"light"],
+["quotidien","normal","il envoie 17 messages à la suite.",4,"normal"],
+["quotidien","normal","il fait des vocaux de 8 minutes.",5,"normal"],
+["relation","normal","il répond « fais comme tu veux » mais espère exactement l'inverse.",3,"normal"],
+["drôle","normal","il danse comme si personne ne regardait… alors que tout le monde regarde.",8,"light"],
+["quotidien","normal","il met six réveils et se rendort quand même.",2,"normal"],
+["drôle","normal","il applaudit quand l'avion atterrit.",5,"light"],
+["quotidien","normal","il prend toujours le dernier morceau sans demander.",4,"normal"],
+["relation","normal","il connaît le prénom de ton ex avant même de te connaître.",7,"normal"],
+["drôle","normal","il raconte la même histoire à chaque soirée.",6,"light"],
+["quotidien","normal","il ne regarde jamais l'heure mais demande toujours quelle heure il est.",3,"light"],
+["drôle","normal","il utilise un mot anglais dans chaque phrase.",7,"light"],
+["relation","normal","il laisse systématiquement le choix du restaurant puis refuse toutes les propositions.",2,"normal"],
+["quotidien","normal","il dit « j'arrive » alors qu'il n'est pas encore parti.",3,"normal"],
+["drôle","normal","il rit avant d'avoir fini sa propre blague.",7,"light"],
+
+["soirée","débat","il organise une soirée et disparaît avant minuit.",3,"normal"],
+["soirée","duel","il devient beaucoup trop compétitif dès qu'il y a un jeu.",4,"normal"],
+["soirée","groupe","il connaît toujours quelqu'un dans la soirée, même à l'autre bout du pays.",8,"light"],
+["soirée","joker","il a le droit de rejeter cette carte une fois.",1,"light"],
+
+["quotidien","normal","il commande toujours exactement la même chose au restaurant.",5,"light"],
+["relation","normal","il répond uniquement avec des GIFs.",6,"light"],
+["drôle","normal","il chante faux mais avec une confiance absolue.",7,"light"],
+["quotidien","normal","il oublie systématiquement où il a posé son téléphone.",4,"normal"],
+["relation","normal","il veut connaître ton signe astrologique avant ton nom de famille.",6,"light"],
+["drôle","normal","il fait des captures d'écran de conversations complètement banales.",8,"light"],
+["quotidien","normal","il lit les menus de restaurant pendant vingt minutes.",3,"light"],
+["drôle","normal","il dit « petite sieste » et disparaît trois heures.",6,"light"],
+["relation","normal","il analyse chaque emoji comme s'il s'agissait d'un code secret.",5,"normal"],
+["soirée","normal","il propose « juste un dernier verre » cinq fois.",4,"normal"],
+["quotidien","normal","il garde 47 onglets ouverts sur son téléphone.",7,"light"],
+["drôle","normal","il raconte une anecdote et oublie la chute.",4,"light"],
+["relation","normal","il met un point final à tous ses SMS.",6,"light"],
+["drôle","normal","il applaudit quand quelqu'un réussit un créneau.",8,"light"],
+["quotidien","normal","il fait semblant de connaître une chanson qu'il découvre en même temps que tout le monde.",5,"light"],
+["soirée","normal","il devient DJ sans que personne ne lui demande.",3,"normal"],
+
+["drôle","normal","il utilise « littéralement » pour tout.",7,"light"],
+["quotidien","normal","il arrive en avance mais dit qu'il est en retard.",4,"light"],
+["relation","normal","il demande « on est quoi ? » au bout de trois rendez-vous.",2,"normal"],
+["drôle","normal","il parle à son animal comme à un colocataire.",8,"light"],
+["quotidien","normal","il fait ses courses sans liste et oublie la moitié.",3,"normal"],
+["soirée","normal","il connaît le videur par son prénom.",8,"light"],
+["drôle","normal","il fait une référence à une série que personne n'a vue.",6,"light"],
+["relation","normal","il répond « mdr » sans rire.",4,"light"],
+["quotidien","normal","il met une alarme pour se rappeler de boire de l'eau.",6,"light"],
+["drôle","normal","il prend 40 photos avant d'en poster une.",7,"light"],
+["relation","normal","il demande « tu es où ? » alors que tu viens de lui envoyer ta localisation.",3,"normal"],
+["soirée","normal","il arrive avec une enceinte énorme pour une soirée calme.",2,"normal"],
+
+["drôle","normal","il dit qu'il n'aime pas danser puis danse dès qu'une chanson passe.",9,"light"],
+["quotidien","normal","il regarde le prix avant de regarder le plat.",5,"light"],
+["relation","normal","il laisse volontairement un message en « lu » pour répondre plus tard.",4,"normal"],
+["drôle","normal","il connaît tous les potins mais prétend ne pas aimer les potins.",9,"light"],
+["soirée","normal","il propose un karaoké à 2 h du matin.",6,"light"],
+["quotidien","normal","il met son téléphone en mode avion pour ne pas être dérangé puis oublie de le désactiver.",5,"light"],
+
+["relation","normal","il donne des conseils qu'il ne suit jamais.",3,"normal"],
+["drôle","normal","il a une playlist nommée « vibes ».",7,"light"],
+["quotidien","normal","il mange toujours le dessert des autres.",6,"light"],
+["soirée","normal","il dit « personne ne saura » juste avant une idée douteuse.",2,"hard"],
+["relation","normal","il envoie « faut qu'on parle » puis répond trois heures plus tard.",1,"hard"],
+["drôle","normal","il fait des bruits de bouche sans s'en rendre compte.",4,"light"],
+["quotidien","normal","il demande le Wi-Fi avant de dire bonjour.",1,"normal"],
+["relation","normal","il se souvient d'un détail vieux de cinq ans mais oublie ton anniversaire.",4,"normal"],
+["drôle","normal","il parle tout seul quand il cherche quelque chose.",8,"light"],
+["soirée","normal","il veut refaire le monde à 3 h du matin.",7,"light"],
+["quotidien","normal","il regarde la météo alors qu'il va rester chez lui.",5,"light"],
+["drôle","normal","il fait une blague et regarde immédiatement si tout le monde a ri.",7,"light"],
+
+["relation","normal","il dit « je suis pas jaloux » avec un dossier de preuves.",2,"hard"],
+["soirée","normal","il veut faire une photo de groupe à chaque heure.",5,"light"],
+["quotidien","normal","il garde les boîtes parce que « ça peut servir ».",4,"light"],
+["drôle","normal","il donne des noms à ses plantes.",8,"light"],
+["relation","normal","il répond par « ok. » avec un point très menaçant.",3,"hard"],
+["soirée","normal","il connaît déjà la prochaine soirée avant que celle-ci soit terminée.",8,"light"],
+["quotidien","normal","il ne ferme jamais les portes de placard.",2,"light"],
+["drôle","normal","il transforme chaque histoire en conférence TED.",6,"light"],
+["relation","normal","il envoie un « bonne nuit » puis reste en ligne une heure.",7,"normal"],
+["soirée","normal","il propose un jeu et explique les règles pendant vingt minutes.",3,"normal"],
+["drôle","normal","il fait semblant d'être dans un clip quand il marche avec des écouteurs.",9,"light"],
+["quotidien","normal","il mange directement dans le frigo.",6,"light"],
+
+["relation","normal","il veut toujours savoir « qui a liké ».",2,"normal"],
+["drôle","normal","il prend une voix différente quand il parle au téléphone.",8,"light"],
+["soirée","normal","il dit qu'il ne boira pas puis devient le plus motivé de la table.",0,"hard"],
+["quotidien","normal","il met ses vêtements « pas sales » sur une chaise pendant une semaine.",3,"normal"],
+["relation","normal","il répond « comme tu veux » à toutes les décisions.",0,"normal"],
+["drôle","normal","il fait des imitations beaucoup trop précises.",10,"light"],
+["quotidien","normal","il ouvre le frigo sans savoir ce qu'il cherche.",5,"light"],
+["soirée","normal","il transforme une sortie tranquille en aventure.",8,"light"],
+["relation","normal","il donne un surnom à tout le monde.",7,"light"],
+["drôle","normal","il raconte un rêve comme si c'était une intrigue de film.",8,"light"],
+["quotidien","normal","il commande en ligne puis oublie ce qu'il a acheté.",4,"normal"],
+["soirée","normal","il connaît une chanson honteuse par cœur.",10,"light"],
+
+["drôle","normal","il met trois minutes à choisir une photo de profil.",5,"light"],
+["relation","normal","il demande « tu me trouves comment ? » et attend une dissertation.",3,"normal"],
+["quotidien","normal","il dit qu'il n'a plus faim puis finit les assiettes.",7,"light"],
+["soirée","normal","il lance une discussion philosophique au milieu d'une partie.",6,"light"],
+["drôle","normal","il utilise des expressions de grand-parent avec beaucoup trop de sérieux.",8,"light"],
+["quotidien","normal","il sauvegarde des recettes qu'il ne cuisinera jamais.",4,"light"],
+["relation","normal","il veut toujours avoir le dernier mot.",2,"normal"],
+["drôle","normal","il fait une capture d'écran de son propre écran d'accueil.",6,"light"],
+["soirée","normal","il connaît toujours un after.",9,"light"],
+["quotidien","normal","il dit « je pars dans 5 minutes » pendant 40 minutes.",3,"normal"]
+
+];
+
+
+/*
+ * ============================================================
+ * COMPATIBILITÉ DES CARTES
+ * ============================================================
+ *
+ * Les cartes intégrées possèdent toutes une référence explicite.
+ *
+ * Pour d'anciennes cartes personnalisées sauvegardées avant cette
+ * version, il est possible qu'aucune référence n'existe.
+ *
+ * Dans ce cas, on calcule une référence déterministe à partir
+ * du contenu de la carte. Ce mécanisme n'utilise volontairement
+ * PAS 5 comme valeur de secours.
+ *
+ * Les nouvelles cartes personnalisées demandent toujours
+ * directement une référence entre 0 et 10.
+ * ============================================================
+ */
+
+function inferReference(text="",category="quotidien",type="normal"){
+  const s=String(text).toLowerCase();
+
+  let value={
+    quotidien:5,
+    relation:4,
+    drôle:7,
+    soirée:6
+  }[category] ?? 5;
+
+  const rules=[
+    [/uniquement|jamais|toujours|systématiquement/, -2],
+    [/retard|oublie|oublier|ex|jaloux|jalous|menace|culpabil/, -2],
+    [/voleur|vole|prend.*autres|mange.*autres/, -1],
+    [/compétitif|compétitive|règles|dispute|dernier mot/, -1],
+    [/chante|danse|paroles|potins|imitation|rêve|plante|blague/, +2],
+    [/connaît|connaît|par cœur|précis|précise/, +2],
+    [/honteux|honteuse|douteuse|douteux/, +1],
+    [/joker/, 1]
+  ];
+
+  for(const [regex,delta] of rules){
+    if(regex.test(s))value+=delta;
+  }
+
+  /*
+   * Petite variation déterministe afin que deux anciennes cartes
+   * sans référence ne convergent pas toutes vers la même valeur.
+   */
+  let hash=0;
+  for(let i=0;i<s.length;i++){
+    hash=((hash<<5)-hash)+s.charCodeAt(i);
+    hash|=0;
+  }
+
+  const variation=(Math.abs(hash)%5)-2;
+  value+=variation;
+
+  if(type==="joker")value=Math.min(value,2);
+
+  return Math.max(0,Math.min(10,Math.round(value)));
+}
+
+function enrichCards(cards){
+  return cards.map(c=>{
+    const target=Number.isFinite(Number(c[3]))
+      ? Math.max(0,Math.min(10,Number(c[3])))
+      : inferReference(c[2],c[0],c[1]);
+
+    const severity=c[4]||"normal";
+
+    return [c[0],c[1],c[2],target,severity];
+  });
+}
+
+function normalizeCustomCard(c){
+  const target=Number.isFinite(Number(c.target))
+    ? Math.max(0,Math.min(10,Number(c.target)))
+    : inferReference(c.text,c.category,c.type);
+
+  return {
+    text:String(c.text||""),
+    category:c.category||"quotidien",
+    type:c.type||"normal",
+    target,
+    severity:c.severity||"normal"
+  };
+}
+
+function getCardTarget(card){
+  const target=Number(card?.target);
+  if(Number.isFinite(target)){
+    return Math.max(0,Math.min(10,target));
+  }
+
+  return inferReference(card?.text||"",card?.cat||"quotidien",card?.type||"normal");
+}
+
+
+/*
+ * ============================================================
+ * SCORE
+ * ============================================================
+ *
+ * Le score est TOUJOURS l'écart absolu entre :
+ *
+ * note du joueur
+ * et
+ * référence de la carte.
+ *
+ * Plus le score est faible, meilleur est le classement.
+ *
+ * Les conséquences ludiques restent séparées du score de carte.
+ * ============================================================
+ */
+
+function calculateDifference(answer,target){
+  return Math.abs(Number(answer)-Number(target));
+}
+
+
+/*
+ * ============================================================
+ * CONSÉQUENCE
+ * ============================================================
+ *
+ * La conséquence est volontairement indépendante du score.
+ *
+ * Le score reste :
+ *
+ * joueur.score += écart
+ *
+ * La conséquence peut utiliser le même écart mais ne peut jamais
+ * remplacer ni modifier le calcul du score.
+ * ============================================================
+ */
+
+function getPenalty(target,answer,severity){
+  const diff=calculateDifference(answer,target);
+  if(diff===0){
+    return {count:0,text:"✨ Parfait ! Tu évites le défi de cette manche."};
+  }
+  const challenges=[
+    "🎯 Défi express : cite trois choses dans une catégorie choisie par le groupe.",
+    "🧠 Mini-défi : réponds à une question bonus pour gagner un point de prestige.",
+    "⚡ Défi chrono : donne cinq réponses en dix secondes.",
+    "🎭 Défi d’impro : présente un objet proche comme une invention révolutionnaire.",
+    "🔁 Le prochain joueur choisit ta catégorie au prochain tour."
+  ];
+  return {count:1,text:challenges[Math.floor(Math.random()*challenges.length)]};
+}
+
+
+/*
+ * Conséquences du mode sans alcool.
+ *
+ * Le score reste identique : il est toujours égal à l'écart.
+ * Seule la conséquence affichée change.
+ */
+function getSoberChallenge(diff){
+  if(diff===0){
+    return {
+      count:0,
+      text:"✨ Exact ! Aucun défi."
+    };
+  }
+
+  if(diff<=2){
+    return {
+      count:1,
+      text:`🎯 Écart de ${diff} point${diff>1?"s":""} : petit défi !`
+    };
+  }
+
+  if(diff<=4){
+    return {
+      count:1,
+      text:`🎯 Écart de ${diff} points : défi !`
+    };
+  }
+
+  return {
+    count:1,
+    text:`🔥 Écart de ${diff} points : gros défi !`
+  };
+}
+
+
+const themes={
+  violet:["#8b5cf6","#ec4899"],
+  red:["#ef4444","#f97316"],
+  blue:["#3b82f6","#06b6d4"],
+  green:["#22c55e","#14b8a6"],
+  pink:["#ec4899","#f43f5e"],
+  orange:["#f97316","#eab308"],
+  black:["#94a3b8","#64748b"],
+  light:["#2563eb","#7c3aed"]
+};
+
+let state={
+  players:[],
+  mode:"classic",
+  category:"all",
+  playStyle:"friends",
+  playType:"both",
+  playUsed:{},
+  lastPlayCardId:null,
+  round:0,
+  rounds:10,
+  current:0,
+  used:[],
+  notes:[],
+  penalties:0,
+  custom:[],
+  theme:"violet",
+  sound:true,
+  settings:{
+    animations:"on",
+    maxPenalty:10
+  }
+};
+
+let currentCard=null;
+let waiting=false;
+let soberUsed=[];
+let soberRoundDiff=null;
+let soberChallengePair=null;
+let soberChosenKind=null;
+let soberRevealed=false;
+
+const soberLevels=[
+ {name:"Niveau 1 — Facile",min:0,max:1,desc:"Un défi léger, rapide et amusant."},
+ {name:"Niveau 2 — Facile +",min:2,max:3,desc:"Un défi un peu plus original, accessible à tout le monde."},
+ {name:"Niveau 3 — Moyen",min:4,max:5,desc:"Un défi créatif, surprenant ou légèrement gênant."},
+ {name:"Niveau 4 — Difficile",min:6,max:7,desc:"Un défi plus audacieux, toujours facultatif."},
+ {name:"Niveau 5 — Impossible",min:8,max:10,desc:"Un défi spectaculaire, absurde ou mémorable — passer reste toujours possible."}
+];
+const soberDeck={
+ action:[
+ ["Fais une grimace que le groupe doit copier.","Imite un animal pendant dix secondes.","Fais un compliment sincère à la personne de ton choix.","Présente un objet près de toi comme un trésor national.","Décris ta journée comme une bande-annonce de film.","Fais deviner un film sans parler.","Invente un slogan pour une chaussette.","Prends une pose de statue pendant cinq secondes.","Raconte une blague ou invente-en une.","Fais une mini danse de cinq secondes.","Dis l'alphabet avec une voix de robot.","Fais une imitation gentille d'un personnage connu.","Nomme trois qualités d'un joueur volontaire.","Fais une publicité pour un verre d'eau.","Parle comme un présentateur météo jusqu'au prochain tour.","Mime ton plat préféré.","Invente un nom de super-héros pour le joueur à ta gauche.","Chante une phrase comme à l'opéra.","Fais un salut royal à tout le groupe.","Fais une pose de couverture d'album."],
+ ["Invente un surnom temporaire et gentil pour un volontaire.","Vends un objet banal comme un produit de luxe.","Mime une célébrité et laisse le groupe deviner.","Fais une déclaration passionnée à une chaise.","Raconte une histoire banale avec un suspense dramatique.","Fais une poignée de main imaginaire avec un joueur volontaire.","Improvise un discours de motivation sur les frites.","Parle en rimes pendant le prochain tour.","Fais une scène de rencontre digne d'une comédie romantique.","Imite une personne qui découvre une technologie pour la première fois.","Fais deviner un métier avec des gestes.","Présente le joueur à droite comme une superstar.","Invente une danse qui porte ton prénom.","Fais une interview imaginaire d'un coussin.","Raconte une mini-histoire en utilisant trois mots choisis par le groupe.","Fais semblant de recevoir un prix prestigieux.","Fais une bande-annonce dramatique de la soirée.","Parle comme un commentateur sportif pendant vingt secondes.","Joue une scène où tu commandes le repas le plus étrange du monde.","Fais un compliment créatif à une personne volontaire."],
+ ["Rejoue ta pire tentative de drague, en version théâtrale et fictive.","Déclare ton amour à un objet choisi par le groupe.","Laisse le groupe choisir un mot à placer naturellement dans ta prochaine phrase.","Fais un discours de rupture à une plante ou un objet.","Improvises une scène où tu gagnes un Oscar pour un rôle ridicule.","Fais une publicité passionnée pour le produit le moins intéressant de la pièce.","Joue une scène de jalousie envers une pizza imaginaire.","Fais une imitation exagérée d'un influenceur qui présente une cuillère.","Raconte une histoire inventée où tu es le héros maladroit.","Fais un défilé de mode avec un accessoire choisi par le groupe.","Joue une demande en mariage à un objet inanimé.","Fais un rap improvisé sur les chaussures.","Interprète une chanson connue comme une ballade triste.","Défends pendant vingt secondes une opinion absurde choisie par le groupe.","Fais une scène de film d'action au ralenti, sans te déplacer dangereusement.","Invente une excuse extravagante pour arriver en retard.","Joue un vendeur qui tente de vendre un caillou imaginaire.","Fais une déclaration de victoire après avoir accompli une tâche banale.","Raconte une histoire en jouant tous les personnages.","Fais une imitation théâtrale d'un robot amoureux."],
+ ["Joue une scène de jalousie exagérée face à une chaise.","Fais une rupture dramatique avec un objet, comme dans une série.","Lis une phrase banale comme si tu révélais un secret d'État.","Joue un procès où tu défends une frite accusée de crime.","Fais une scène de retrouvailles avec une chaussure imaginaire.","Improvise une déclaration passionnée à un objet choisi par un volontaire.","Interprète un méchant de film qui veut voler la dernière part de pizza.","Fais une conférence de presse après une victoire ridicule.","Joue un personnage qui découvre qu'il est un grille-pain.","Réalise un mini-spectacle de trente secondes sur un sujet choisi.","Fais un duel de regards avec un joueur volontaire, qui peut arrêter quand il veut.","Joue une scène de téléréalité en annonçant une révélation totalement inventée.","Chante une chanson d'amour à ton repas préféré.","Fais une fausse publicité dramatique pour un mouchoir.","Improvises un discours de maire pour interdire les chaussettes dépareillées.","Joue un détective qui enquête sur la disparition d'un biscuit imaginaire.","Fais un tutoriel ultra-sérieux pour t'asseoir sur une chaise.","Décris le joueur volontaire à la manière d'un documentaire animalier bienveillant.","Interprète une scène de tribunal contre ton réveil.","Fais un discours de motivation comme si le groupe allait conquérir la Lune."],
+ ["Joue une scène de rupture cinématographique avec une chaise.","Fais une imitation théâtrale pendant trente secondes, personnage choisi avec ton accord.","Invente une chanson ridicule sur un joueur volontaire et chante le refrain.","Fais une déclaration romantique à un objet comme si ta vie en dépendait.","Interprète un héros de soap opera qui perd son sandwich.","Joue un faux appel entièrement mimé où tu annonces avoir cassé une télévision imaginaire.","Fais un discours présidentiel pour défendre les chaussons.","Rejoue une scène de film d'horreur avec un coussin comme monstre.","Fais un défilé de mode avec trois poses exagérées.","Improvises une dispute passionnée entre deux personnages que tu joues.","Fais une scène de confession dramatique à une plante.","Raconte une histoire inventée comme si c'était le plus grand scandale du siècle.","Présente ton talent le plus banal comme une performance olympique.","Joue une scène de mariage avec un objet fictif, sans contact imposé.","Fais une déclaration d'amour à ton plat préféré en alexandrins si tu peux.","Interprète une star qui répond à des questions absurdes en conférence de presse.","Réalise une bande-annonce de film dont le héros est une chaussette.","Joue une scène où tu annonces une nouvelle totalement imaginaire au groupe.","Fais un débat télévisé en incarnant les deux candidats opposés.","Défends un objet de la pièce comme s'il était une œuvre d'art inestimable."],
+ ["Joue une scène de film improvisée avec deux volontaires, chacun peut passer.","Interprète une rupture tragique avec une chaise, comme dans une finale de série.","Invente et chante une chanson absurde sur la soirée avec un refrain.","Fais un discours de remise de prix pour la personne volontaire la plus dramatique.","Joue tous les rôles d'une telenovela en trente secondes.","Fais une déclaration d'amour épique à un objet choisi avec ton accord.","Invente un procès complètement absurde et joue l'avocat, le juge et le témoin.","Fais un faux appel joué devant le groupe pour annoncer que tu as cassé une télévision imaginaire.","Joue une bande-annonce de film catastrophe dont le héros est un grille-pain.","Invente une cérémonie de remise de prix pour une chaussette.","Fais un duel de discours épiques contre un joueur volontaire sur le thème des pâtes.","Interprète une scène de retrouvailles digne d'un film, avec un objet.","Fais une chanson d'opéra sur la dernière part de pizza.","Joue un débat entre ton toi du passé et ton toi du futur.","Fais une scène de détective révélant le coupable d'un crime imaginaire.","Invente une publicité de luxe pour un objet choisi par le groupe.","Raconte une histoire absurde en incarnant au moins quatre personnages.","Fais une conférence de presse après avoir gagné le championnat du monde de sieste.","Joue une scène de film romantique avec un objet inanimé.","Crée un mini-show de trente secondes sur un thème choisi, sans obligation de contact ni d'exposition personnelle."]
+ ],
+ truth:[
+ ["Quel petit plaisir améliore toujours ta journée ?","Quelle chanson connais-tu presque par cœur ?","Quel endroit aimerais-tu visiter un jour ?","Quel plat pourrais-tu manger chaque semaine ?","Quelle qualité apprécies-tu le plus chez un ami ?","Quelle activité aimerais-tu apprendre ?","Quel film peux-tu revoir sans te lasser ?","Quel est ton goûter préféré ?","Quel personnage fictif aimerais-tu rencontrer ?","Quel est ton meilleur souvenir de vacances ?","Quelle chose te fait rire à tous les coups ?","Quel talent aimerais-tu avoir ?","Quelle saison préfères-tu et pourquoi ?","Quel jeu aimais-tu enfant ?","Quel objet emporterais-tu sur une île déserte ?","Quel est ton surnom le plus drôle ?","Quelle chanson te met de bonne humeur ?","Quelle odeur te rappelle un bon souvenir ?","Quel serait ton super-pouvoir inutile préféré ?","Quelle activité te détend le plus ?"],
+ ["Quelle est ta recherche Internet la plus inutile récente ?","Quel est ton talent le plus improbable ?","Quelle mode as-tu suivie puis regrettée ?","Quel personnage fictif serait ton colocataire idéal ?","Quelle est ta pire excuse pour être en retard ?","Quelle opinion sans importance défendras-tu toujours ?","Quel achat inutile t'a pourtant rendu heureux ?","Quelle chanson te fait danser même si tu résistes ?","Quel est ton surnom le plus étrange ?","Quelle petite habitude bizarre as-tu ?","Quel est le plat que tu refuses presque toujours ?","Quel mensonge innocent as-tu raconté enfant ?","Quel métier serais-tu très mauvais à exercer ?","Quelle chose tout le monde adore mais pas toi ?","Quel est ton moment le plus maladroit de la semaine ?","Quelle célébrité jouerait ton rôle dans un film ?","Quel est le cadeau le plus surprenant reçu ?","Quelle règle absurde instaurerais-tu pour une journée ?","Quelle application utilises-tu trop souvent ?","Quelle chanson connais-tu par cœur sans l'assumer ?"],
+ ["Quelle première impression les gens ont-ils souvent de toi, à tort ?","Quelle chose aimerais-tu oser essayer cette année ?","Quel compliment t'a vraiment marqué ?","Quelle habitude aimerais-tu changer sans te juger ?","Quel souvenir te fait rire à chaque fois ?","Quelle qualité aimerais-tu développer ?","Quelle est ta tentative de drague la plus maladroite que tu acceptes de raconter ?","Quel petit détail peut te faire craquer chez quelqu'un ?","Quelle chose te gêne alors qu'elle est banale ?","Quelle décision spontanée t'a rendu heureux ?","Quel est ton plus grand talent caché ?","Quelle situation t'a fait rougir récemment ?","Quelle opinion as-tu changée avec le temps ?","Quelle chose fais-tu quand tu veux impressionner quelqu'un ?","Quelle est ta pire excuse pour éviter une sortie ?","Quel compliment aimerais-tu entendre plus souvent ?","Quelle est la chose la plus drôle que tu aies faite par nervosité ?","Quel cliché sur toi est complètement faux ?","Quel rendez-vous imaginaire serait parfait pour toi ?","Quelle chose aimerais-tu apprendre à dire plus facilement ?"],
+ ["Quelle situation t'a fait te sentir vraiment maladroit ?","Quel moment gênant peux-tu raconter sans révéler de secret ?","Quel est le geste le plus théâtral que tu aies fait pour attirer l'attention ?","Quelle habitude étrange as-tu quand personne ne regarde ?","Quelle impression avais-tu d'une personne avant de mieux la connaître ?","Quel est ton plus grand faux pas en conversation ?","Quel est le compliment le plus inattendu que tu aies reçu ?","Quelle chose as-tu faite pour éviter une situation embarrassante ?","Quelle est ta plus drôle tentative de paraître cool ?","Quel est ton talent le plus inutile ?","Quelle phrase te fait immédiatement rire ?","Quelle est une peur ridicule que tu acceptes de partager ?","Quelle chose as-tu apprise à tes dépens récemment ?","Quel personnage de fiction ressemble le plus à ta vie amoureuse imaginaire ?","Quelle est la pire idée que tu aies trouvée excellente sur le moment ?","Quel moment t'a donné envie de disparaître, mais te fait rire aujourd'hui ?","Quelle chose assumes-tu aimer alors que les autres trouvent ça bizarre ?","Quelle est la chose la plus absurde que tu aies faite par défi ?","Quel est ton plus grand défaut dans un jeu de groupe ?","Quelle question espérais-tu ne pas tirer ce soir ?"],
+ ["Quelle anecdote gênante acceptes-tu de partager avec le groupe ?","Quelle chose ridicule as-tu faite pour impressionner quelqu'un ?","Quelle est ta pire tentative de drague racontable ?","Quel est le plus grand malentendu que tu aies vécu ?","Quelle habitude pourrais-tu défendre même si elle est bizarre ?","Quel est le message que tu as rédigé puis finalement jamais envoyé ?","Quelle situation t'a fait rire alors qu'il ne fallait pas ?","Quelle est ta plus grande contradiction ?","Quelle est la chose la plus dramatique que tu aies faite pour un petit problème ?","Quelle première impression sur toi est la plus fausse ?","Quel est ton plus grand moment de gêne en public que tu acceptes de raconter ?","Quelle chose as-tu fait semblant de comprendre ?","Quelle est ta plus drôle excuse inventée ?","Quel compliment t'a fait perdre tes moyens ?","Quelle est ta plus grosse maladresse lors d'une rencontre ?","Quel est le conseil amoureux le plus absurde que tu aies reçu ?","Quelle chose te fait craquer immédiatement chez un personnage fictif ?","Quel est le moment où tu as le plus surjoué une réaction ?","Quelle décision impulsive est devenue une bonne anecdote ?","Quelle vérité drôle sur toi étonnerait le groupe ?"],
+ ["Quelle anecdote très embarrassante acceptes-tu de raconter sans révéler d'information privée ?","Quelle est la chose la plus ridicule que tu aies faite pour impressionner quelqu'un ?","Quel moment de ta vie mériterait une scène au ralenti ?","Quelle est ta plus grande catastrophe de rendez-vous que tu acceptes de partager ?","Quelle fois as-tu fait semblant d'être sûr de toi alors que tu paniquais ?","Quelle situation a déclenché chez toi une réaction beaucoup trop dramatique ?","Quelle est la chose la plus absurde que tu aies prise très au sérieux ?","Quelle histoire te concernant serait un excellent épisode de comédie ?","Quel est ton plus grand échec transformé en anecdote drôle ?","Quelle est la chose la plus inattendue qui t'ait fait rougir ?","Quelle est ta plus grosse erreur de jugement dans une situation sociale ?","Quel rôle joues-tu souvent dans un groupe sans t'en rendre compte ?","Quelle chose oses-tu avouer seulement parce que tu peux passer ?","Quel est le plus grand malentendu romantique que tu acceptes de raconter ?","Quelle est la chose la plus théâtrale que tu aies faite après une déception ?","Quelle opinion improbable défendrais-tu dans un débat télévisé ?","Quelle question te ferait hésiter, même si tu peux passer ?","Quelle anecdote as-tu racontée tellement de fois qu'elle mérite un prix ?","Quel est ton côté le plus contradictoire ?","Quelle est ta réaction la plus excessive à un tout petit problème ?"]
+ ]
+};
+
+
+
+/* Bibliothèque défis de jeu : 100 cartes par style et par type.
+   Chaque graine est déclinée en quatre contraintes de jeu différentes.
+   Les identifiants et les pioches sont indépendants par style/type/niveau. */
+const playSeeds = {
+ friends:{
+  action:[
+   "Imite un présentateur météo qui annonce une pluie de frites","Vends une chaussette comme un objet de luxe","Fais une bande-annonce dramatique de la soirée","Fais deviner un film sans parler","Invente un hymne pour le groupe et chante le refrain","Raconte une histoire banale comme un scandale national","Fais une publicité pour un verre d'eau","Mime ton application préférée comme un animal","Fais un discours de victoire après une tâche ridicule","Invente un slogan pour le canapé où tu es assis","Joue un influenceur qui teste une cuillère","Fais une imitation gentille d'un personnage connu","Présente la personne à ta gauche comme une légende","Improvises un rap sur les chaussettes","Fais une interview à un objet choisi par le groupe","Mime une journée typique en trois gestes","Fais un mini karaoké sur une chanson choisie par toi","Défends une opinion absurde sur les pizzas","Joue un robot qui découvre les émotions","Fais un défilé de mode avec un accessoire banal","Invente une poignée de main imaginaire","Raconte une anecdote fictive avec une chute inattendue","Fais un commentaire sportif sur quelqu'un qui boit de l'eau","Joue une scène de télé-réalité sans citer de vraie personne","Fais une statue représentant ton humeur actuelle"
+  ],
+  truth:[
+   "Quelle est ta recherche Internet la plus inutile","Quel talent inutile aimerais-tu montrer aux Jeux olympiques","Quelle chanson connais-tu honteusement par cœur","Quelle excuse absurde as-tu déjà utilisée pour annuler un plan","Quelle habitude bizarre assumes-tu totalement","Quel achat inutile t'a rendu étonnamment heureux","Quelle mode as-tu suivie puis regrettée","Quelle est ta plus drôle maladresse en public","Quel personnage fictif serait ton colocataire catastrophique","Quelle opinion sans importance défendras-tu toujours","Quelle est ta pire tentative de paraître cool","Quelle chose tout le monde adore mais te laisse perplexe","Quel surnom ridicule pourrait te correspondre","Quel est le mensonge innocent le plus drôle que tu racontais enfant","Quel est ton talent le plus improbable","Quel est le moment où tu as le plus surjoué une réaction","Quelle petite chose te fait rire à tous les coups","Quelle règle absurde inventerais-tu pour le groupe","Quel serait ton pire métier dans un cirque","Quel est ton plus grand défaut quand tu joues à un jeu","Quelle chanson te fait danser malgré toi","Quelle chose fais-tu toujours au dernier moment","Quel objet représenterait le mieux ta personnalité","Quel est ton plus gros fou rire pour une raison nulle","Quelle anecdote drôle peux-tu raconter sans dévoiler de secret"
+  ]
+ },
+ classic:{
+  action:[
+   "Fais un compliment sincère à un joueur volontaire","Présente ton objet préféré comme une invention révolutionnaire","Raconte ta journée comme le résumé d'un film","Mime un métier jusqu'à ce que quelqu'un le devine","Fais une mini scène de rencontre fictive","Explique ton passe-temps comme si tu donnais une conférence","Invente une devise personnelle et annonce-la solennellement","Décris le repas idéal comme un critique gastronomique","Fais deviner une émotion sans parler","Fais un discours de motivation sur un sujet banal","Invente un nom de super-héros pour toi-même","Raconte un souvenir heureux en trois phrases","Fais une démonstration de ton talent le plus simple","Présente un joueur comme un invité d'honneur","Invente une publicité pour ton loisir préféré","Joue les deux côtés d'un débat léger","Fais une pose qui représente ton humeur","Fais deviner un lieu avec trois indices","Décris ton week-end idéal avec une voix de documentaire","Invente un toast sans alcool à l'amitié","Fais une déclaration passionnée à ton plat préféré","Raconte une histoire en utilisant trois mots proposés","Mime ta réaction quand tu reçois une bonne nouvelle","Fais un discours pour défendre un petit plaisir quotidien","Invente une poignée de main de célébration"
+  ],
+  truth:[
+   "Quelle qualité apprécies-tu le plus chez un ami","Quelle activité aimerais-tu apprendre cette année","Quel lieu aimerais-tu visiter et pourquoi","Quel petit plaisir améliore immédiatement ta journée","Quelle première impression sur toi est souvent fausse","Quelle décision spontanée t'a fait du bien","Quel film ou livre recommanderais-tu à tout le monde","Quelle habitude aimerais-tu prendre","Quelle compétence aimerais-tu maîtriser en une journée","Quel souvenir te fait sourire instantanément","Quelle chose te rend fier récemment","Quel conseil t'a réellement aidé","Quel repas te rappelle un bon souvenir","Quelle qualité aimerais-tu développer davantage","Quel sujet pourrais-tu expliquer pendant une heure","Quelle activité te détend après une longue journée","Quel compliment t'a marqué positivement","Quelle chose aimerais-tu essayer au moins une fois","Quel petit luxe trouves-tu vraiment utile","Quelle valeur est essentielle dans une amitié","Quel projet aimerais-tu concrétiser","Quelle tradition aimerais-tu créer","Quelle peur as-tu réussi à dépasser, si tu veux la partager","Quelle chose simple te rend heureux","Quel apprentissage récent t'a surpris"
+  ]
+ },
+ couple:{
+  action:[
+   "Fais un compliment précis et sincère à la personne de ton choix","Propose un câlin à quelqu'un qui en a envie","Offre un bisou sur la joue uniquement si l'autre personne est d'accord","Décris un rendez-vous idéal comme une bande-annonce romantique","Écris mentalement trois qualités que tu apprécies chez quelqu'un","Fais une déclaration d'amour théâtrale à un objet","Propose une danse lente imaginaire, sans contact obligatoire","Raconte un souvenir tendre ou invente un scénario romantique","Choisis une chanson qui représenterait une relation idéale","Fais une imitation de toi en premier rendez-vous","Décris ton idée d'une soirée parfaite à deux","Fais un compliment sur une qualité, pas sur le physique","Joue une scène de comédie romantique avec un volontaire consentant","Invente un surnom affectueux que l'autre peut accepter ou refuser","Propose une poignée de main secrète à la personne de ton choix","Fais un toast à l'amour et à l'amitié","Mime la réaction idéale à une surprise romantique","Prépare en trente secondes un rendez-vous imaginaire à petit budget","Récite une phrase de drague volontairement ringarde","Fais une déclaration passionnée à ton dessert préféré","Propose une activité à faire ensemble un jour","Décris un cadeau fait maison que tu aimerais offrir","Fais une pose de couverture de comédie romantique","Dis une phrase gentille que tout le monde mérite d'entendre","Invente un message mignon pour souhaiter une bonne journée"
+  ],
+  truth:[
+   "Quel geste attentionné te touche le plus","Quelle qualité te fait te sentir en confiance avec quelqu'un","Quel serait ton rendez-vous idéal, même très simple","Quelle chanson te rappelle l'amour ou la tendresse","Quelle petite attention te fait te sentir apprécié","Quelle est ta façon préférée de montrer ton affection","Quel est le meilleur compliment qu'on puisse te faire","Qu'est-ce qui rend une conversation vraiment agréable","Quelle activité aimerais-tu partager à deux","Quelle valeur est indispensable dans une relation","Quel détail peut rendre une journée romantique","Quelle comédie romantique ou histoire d'amour te plaît","Préfères-tu les surprises ou les projets préparés, et pourquoi","Quel est ton langage de l'affection préféré, si tu veux répondre","Quelle qualité te fait rire chez une personne","Quel souvenir tendre acceptes-tu de partager","Quelle serait ta sortie idéale sans dépenser beaucoup","Quelle est ta définition d'une relation saine","Quel geste simple peut réparer une mauvaise journée","Quelle est la chose la plus romantique qui soit aussi très simple","Quel sujet aimerais-tu aborder davantage avec quelqu'un","Quelle limite personnelle est importante à respecter dans une relation","Quel compliment sincère aimerais-tu entendre plus souvent","Qu'est-ce qui te fait te sentir écouté","Quelle tradition mignonne aimerais-tu inventer à deux"
+  ]
+  }
+};
+const styleLabels={friends:"Entre potes",classic:"Classique",couple:"Couple"};
+const typeLabels={action:"Défi express",truth:"Question bonus"};
+const cardSuffixes={
+ action:[
+  "Fais-le en moins de 15 secondes.",
+  "Ajoute une fin complètement inattendue.",
+  "Joue-le comme si tu étais dans un film épique.",
+  "Fais participer un volontaire, avec son accord."
+ ],
+ truth:[
+  "Réponds en une phrase, ou passe si tu préfères.",
+  "Donne un exemple concret si tu en as envie.",
+  "Réponds avec humour, sans révéler de secret privé.",
+  "Tu peux répondre sérieusement ou inventer une réponse fictive."
+ ]
+};
+function stableId(text){let h=2166136261;for(let i=0;i<text.length;i++){h^=text.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(36)}
+const playDecks={};
+for(const style of Object.keys(playSeeds)){
+ playDecks[style]={};
+ for(const kind of ["action","truth"]){
+  const base=playSeeds[style][kind],suffixes=cardSuffixes[kind],cards=[];
+  base.forEach((seed,i)=>{
+   suffixes.forEach((suffix,j)=>{
+    const text=seed+" — "+suffix;
+    cards.push({id:style+"-"+kind+"-"+stableId(text),style,kind,text,level:((i*4+j)%5)+1});
+   });
+  });
+  playDecks[style][kind]=cards;
+ }
+}
+function selectedStyles(){return state.playStyle==="all"?["friends","classic","couple"]:[state.playStyle];}
+function selectedKinds(){return state.playType==="both"?["action","truth"]:[state.playType];}
+function drawPlayCard(kind,level=null){
+ const styles=selectedStyles();
+ let pool=styles.flatMap(style=>(playDecks[style]?.[kind]||[]).filter(c=>level===null||c.level===level));
+ if(!pool.length)return null;
+ const key=styles.slice().sort().join("+")+"|"+kind+"|"+(level||"all");
+ if(!state.playUsed)state.playUsed={};
+ let used=state.playUsed[key]||[];
+ let available=pool.filter(c=>!used.includes(c.id));
+ if(!available.length){used=[];available=pool.slice();}
+ if(available.length>1&&state.lastPlayCardId){
+  const withoutLast=available.filter(c=>c.id!==state.lastPlayCardId);
+  if(withoutLast.length)available=withoutLast;
+ }
+ // Fisher–Yates shuffle for a proper random draw
+ for(let i=available.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[available[i],available[j]]=[available[j],available[i]];}
+ const picked=available[0];
+ used.push(picked.id);state.playUsed[key]=used;state.lastPlayCardId=picked.id;
+ save("game",state);
+ return picked;
+}
+function drawSelectedPlayCard(level=null){
+ const kinds=selectedKinds();
+ if(kinds.length===1)return drawPlayCard(kinds[0],level);
+ const kind=kinds[Math.random()<.5?"0":"1"];
+ return drawPlayCard(kind,level);
+}
+function bindOptionChips(selector,attr,stateKey){
+ document.querySelectorAll(selector+" .chip").forEach(btn=>btn.addEventListener("click",()=>{
+  document.querySelectorAll(selector+" .chip").forEach(x=>x.classList.remove("active"));
+  btn.classList.add("active");state[stateKey]=btn.dataset[attr];
+ }));
+}
+bindOptionChips("#playStyleChips","style","playStyle");
+bindOptionChips("#playTypeChips","playtype","playType");
+$("playStyleChips").closest(".play-options").classList.toggle("active",state.mode==="sober");
+
+$("addPlayer").onclick=addPlayer;
+
+$("playerInput").addEventListener("keydown",e=>{
+  if(e.key==="Enter")addPlayer();
+});
+
+document.querySelectorAll("#modeChips .chip").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll("#modeChips .chip")
+      .forEach(x=>x.classList.remove("active"));
+
+    b.classList.add("active");
+    state.mode=b.dataset.mode;
+    // Les réglages Ambiance et Type de carte ne concernent que le mode Sans alcool.
+    $("playStyleChips").closest(".play-options").classList.toggle("active",state.mode==="sober");
+    const roundsLabel=document.querySelector('label[for="rounds"]') || document.querySelector('#rounds').previousElementSibling;
+    if(state.mode==="fast"){
+      $("rounds").value=5;
+      $("rounds").disabled=true;
+      if(roundsLabel)roundsLabel.textContent="Nombre de questions (fixé à 5)";
+    }else{
+      $("rounds").disabled=false;
+      $("rounds").value=10;
+      if(roundsLabel)roundsLabel.textContent="Nombre de manches";
+    }
+  };
+});
+
+document.querySelectorAll("#catChips .chip").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll("#catChips .chip")
+      .forEach(x=>x.classList.remove("active"));
+
+    b.classList.add("active");
+    state.category=b.dataset.cat;
+  };
+});
+
+
+const duelQuestions = [{"category": "Culture générale", "question": "Quelle est la capitale de l’Italie ?", "options": ["Rome", "Madrid", "Athènes", "Lisbonne"], "answer": 0}, {"category": "Culture générale", "question": "Combien de côtés possède un hexagone ?", "options": ["5", "6", "7", "8"], "answer": 1}, {"category": "Culture générale", "question": "Quelle planète est surnommée la planète rouge ?", "options": ["Vénus", "Mars", "Jupiter", "Mercure"], "answer": 1}, {"category": "Culture générale", "question": "Quel est le plus vaste océan ?", "options": ["Atlantique", "Indien", "Pacifique", "Arctique"], "answer": 2}, {"category": "Culture générale", "question": "Combien de minutes y a-t-il dans deux heures ?", "options": ["100", "110", "120", "140"], "answer": 2}, {"category": "Culture générale", "question": "Quelle langue parle-t-on principalement au Brésil ?", "options": ["Espagnol", "Portugais", "Français", "Italien"], "answer": 1}, {"category": "Culture générale", "question": "Combien de jours compte une année bissextile ?", "options": ["364", "365", "366", "367"], "answer": 2}, {"category": "Culture générale", "question": "Quel animal est le plus grand mammifère vivant ?", "options": ["Éléphant d’Afrique", "Girafe", "Baleine bleue", "Hippopotame"], "answer": 2}, {"category": "Culture générale", "question": "Quel est le symbole chimique de l’eau ?", "options": ["CO₂", "H₂O", "O₂", "NaCl"], "answer": 1}, {"category": "Culture générale", "question": "Combien de couleurs compte traditionnellement l’arc-en-ciel ?", "options": ["5", "6", "7", "8"], "answer": 2}, {"category": "Culture générale", "question": "Quelle est la capitale du Japon ?", "options": ["Kyoto", "Tokyo", "Osaka", "Séoul"], "answer": 1}, {"category": "Culture générale", "question": "Sur quel continent se trouve l’Égypte ?", "options": ["Afrique", "Europe", "Amérique du Sud", "Océanie"], "answer": 0}, {"category": "Culture générale", "question": "Combien de pattes possède une araignée ?", "options": ["6", "8", "10", "12"], "answer": 1}, {"category": "Culture générale", "question": "Quel instrument possède généralement 88 touches ?", "options": ["Guitare", "Piano", "Violon", "Flûte"], "answer": 1}, {"category": "Culture générale", "question": "Quel gaz les plantes absorbent-elles principalement pour la photosynthèse ?", "options": ["Oxygène", "Hélium", "Dioxyde de carbone", "Azote"], "answer": 2}, {"category": "Logique", "question": "Quel nombre complète la suite : 2, 4, 8, 16… ?", "options": ["18", "24", "30", "32"], "answer": 3}, {"category": "Logique", "question": "Si tu dépasses la personne en deuxième position, tu es…", "options": ["Premier", "Deuxième", "Troisième", "Dernier"], "answer": 1}, {"category": "Logique", "question": "Un kilo de plumes ou un kilo de fer : lequel est le plus lourd ?", "options": ["Les plumes", "Le fer", "Même poids", "Impossible à savoir"], "answer": 2}, {"category": "Logique", "question": "Combien de mois ont au moins 28 jours ?", "options": ["1", "2", "6", "12"], "answer": 3}, {"category": "Logique", "question": "Tu prends deux pommes sur trois. Combien en as-tu ?", "options": ["1", "2", "3", "5"], "answer": 1}, {"category": "Logique", "question": "Quel nombre manque : 3, 6, 9, __, 15 ?", "options": ["10", "11", "12", "13"], "answer": 2}, {"category": "Logique", "question": "Un père a 4 filles, chaque fille a un frère. Combien d’enfants au minimum ?", "options": ["4", "5", "8", "9"], "answer": 1}, {"category": "Logique", "question": "Qu’est-ce qui monte sans jamais redescendre ?", "options": ["Un ballon", "L’âge", "La pluie", "Un ascenseur"], "answer": 1}, {"category": "Logique", "question": "Combien de fois peut-on soustraire 5 de 25 ?", "options": ["1", "4", "5", "Autant qu’on veut"], "answer": 0}, {"category": "Logique", "question": "Une course compte 10 coureurs. Tu arrives avant le dernier, mais après les 8 premiers. Quelle place ?", "options": ["8e", "9e", "10e", "Impossible"], "answer": 1}, {"category": "Calcul mental", "question": "Combien font 12 × 3 ?", "options": ["24", "36", "39", "42"], "answer": 1}, {"category": "Calcul mental", "question": "Combien font 50 − 17 ?", "options": ["23", "33", "37", "43"], "answer": 1}, {"category": "Calcul mental", "question": "Quelle est la moitié de 86 ?", "options": ["42", "43", "46", "48"], "answer": 1}, {"category": "Calcul mental", "question": "Combien font 9 × 7 ?", "options": ["56", "63", "72", "79"], "answer": 1}, {"category": "Calcul mental", "question": "Combien font 100 ÷ 4 ?", "options": ["20", "25", "40", "50"], "answer": 1}, {"category": "Calcul mental", "question": "Combien font 15 + 28 ?", "options": ["33", "42", "43", "53"], "answer": 2}, {"category": "Calcul mental", "question": "Combien font 7 × 8 ?", "options": ["54", "56", "58", "64"], "answer": 1}, {"category": "Calcul mental", "question": "Combien font 144 ÷ 12 ?", "options": ["10", "11", "12", "14"], "answer": 2}, {"category": "Calcul mental", "question": "Quel est 20 % de 50 ?", "options": ["5", "10", "15", "20"], "answer": 1}, {"category": "Calcul mental", "question": "Combien font 99 + 16 ?", "options": ["105", "115", "116", "125"], "answer": 1}, {"category": "Vocabulaire", "question": "Quel est le contraire de « généreux » ?", "options": ["Avare", "Joyeux", "Rapide", "Calme"], "answer": 0}, {"category": "Vocabulaire", "question": "Quel mot est un synonyme de « rapide » ?", "options": ["Lent", "Véloce", "Fragile", "Prudent"], "answer": 1}, {"category": "Vocabulaire", "question": "Comment appelle-t-on un mot qui a le même sens qu’un autre ?", "options": ["Antonyme", "Synonyme", "Homonyme", "Verbe"], "answer": 1}, {"category": "Vocabulaire", "question": "Quel mot est correctement orthographié ?", "options": ["Acceuil", "Accueil", "Acueil", "Accueuil"], "answer": 1}, {"category": "Vocabulaire", "question": "Quel est le pluriel de « cheval » ?", "options": ["Chevals", "Chevaux", "Chevaus", "Chevales"], "answer": 1}, {"category": "Vocabulaire", "question": "Lequel est un adjectif ?", "options": ["Courir", "Rapidement", "Bleu", "Maison"], "answer": 2}, {"category": "Vocabulaire", "question": "Quel mot rime avec « bateau » ?", "options": ["Chapeau", "Table", "Livre", "Fleur"], "answer": 0}, {"category": "Vocabulaire", "question": "Quel est l’antonyme de « augmenter » ?", "options": ["Monter", "Diminuer", "Grandir", "Ajouter"], "answer": 1}, {"category": "Vocabulaire", "question": "Quel mot désigne une peur intense ?", "options": ["Euphorie", "Phobie", "Nostalgie", "Sympathie"], "answer": 1}, {"category": "Vocabulaire", "question": "Dans « ils chantent », quel est le verbe ?", "options": ["Ils", "Chantent", "Le", "Aucun"], "answer": 1}, {"category": "Cinéma et musique", "question": "Quel héros porte un bouclier aux couleurs des États-Unis ?", "options": ["Thor", "Captain America", "Hulk", "Batman"], "answer": 1}, {"category": "Cinéma et musique", "question": "Dans quel univers trouve-t-on Poudlard ?", "options": ["Star Wars", "Harry Potter", "Le Seigneur des anneaux", "Marvel"], "answer": 1}, {"category": "Cinéma et musique", "question": "Quel instrument a des cordes et se joue souvent avec un archet ?", "options": ["Trompette", "Violon", "Flûte", "Batterie"], "answer": 1}, {"category": "Cinéma et musique", "question": "Quel groupe a chanté « Bohemian Rhapsody » ?", "options": ["ABBA", "Queen", "The Beatles", "U2"], "answer": 1}, {"category": "Cinéma et musique", "question": "Quel personnage Disney perd une pantoufle de verre ?", "options": ["Ariel", "Cendrillon", "Belle", "Mulan"], "answer": 1}, {"category": "Cinéma et musique", "question": "Quel super-héros est associé à Gotham City ?", "options": ["Superman", "Spider-Man", "Batman", "Iron Man"], "answer": 2}, {"category": "Cinéma et musique", "question": "Quel est le nom du lion dans Le Roi Lion ?", "options": ["Simba", "Timon", "Pumbaa", "Scar"], "answer": 0}, {"category": "Cinéma et musique", "question": "Quel instrument possède des touches noires et blanches ?", "options": ["Piano", "Tambour", "Saxophone", "Harpe"], "answer": 0}, {"category": "Cinéma et musique", "question": "Dans Star Wars, quel est le nom de l’arme lumineuse ?", "options": ["Lame solaire", "Sabre laser", "Épée photonique", "Bâton Jedi"], "answer": 1}, {"category": "Cinéma et musique", "question": "Quel personnage est un ogre vert célèbre ?", "options": ["Shrek", "Gru", "Hulk", "Yoda"], "answer": 0}, {"category": "Observation", "question": "Combien de lettres y a-t-il dans le mot « éclair » ?", "options": ["4", "5", "6", "7"], "answer": 2}, {"category": "Observation", "question": "Quelle lettre vient après M dans l’alphabet ?", "options": ["L", "N", "O", "P"], "answer": 1}, {"category": "Observation", "question": "Combien de voyelles dans « banane » ?", "options": ["2", "3", "4", "5"], "answer": 1}, {"category": "Observation", "question": "Lequel ne va pas avec les autres ?", "options": ["Pomme", "Poire", "Carotte", "Pêche"], "answer": 2}, {"category": "Observation", "question": "Combien de zéros dans mille ?", "options": ["1", "2", "3", "4"], "answer": 2}, {"category": "Observation", "question": "Quel mot est écrit à l’envers : « ERRE » ?", "options": ["ERRE", "RREE", "ERER", "REER"], "answer": 0}, {"category": "Observation", "question": "Quelle forme a trois côtés ?", "options": ["Carré", "Triangle", "Cercle", "Hexagone"], "answer": 1}, {"category": "Observation", "question": "Combien de doigts y a-t-il sur deux mains humaines ?", "options": ["8", "10", "12", "20"], "answer": 1}, {"category": "Estimation", "question": "Combien de secondes y a-t-il dans une minute ?", "options": ["30", "45", "60", "100"], "answer": 2}, {"category": "Estimation", "question": "Combien de jours compte une semaine ?", "options": ["5", "6", "7", "8"], "answer": 2}, {"category": "Estimation", "question": "Combien de roues ont généralement trois vélos ?", "options": ["3", "4", "6", "8"], "answer": 2}, {"category": "Estimation", "question": "Combien de mois y a-t-il dans une année ?", "options": ["10", "11", "12", "13"], "answer": 2}, {"category": "Estimation", "question": "Combien de côtés possède un carré ?", "options": ["3", "4", "5", "6"], "answer": 1}, {"category": "Estimation", "question": "Combien de minutes dans une demi-heure ?", "options": ["15", "20", "30", "45"], "answer": 2}, {"category": "Estimation", "question": "Combien de joueurs une équipe de football aligne-t-elle sur le terrain ?", "options": ["9", "10", "11", "12"], "answer": 2}, {"category": "Estimation", "question": "Combien de jours y a-t-il dans deux semaines ?", "options": ["12", "14", "15", "16"], "answer": 1}, {"category": "Questions pièges", "question": "Moïse a-t-il emmené des animaux dans son arche ?", "options": ["Oui, deux de chaque", "Non, c’était Noé", "Seulement des oiseaux", "Un seul"], "answer": 1}, {"category": "Questions pièges", "question": "Un coq pond un œuf sur un toit. De quel côté tombe-t-il ?", "options": ["À gauche", "À droite", "Du côté le plus bas", "Un coq ne pond pas"], "answer": 3}, {"category": "Questions pièges", "question": "Qu’est-ce qui est à toi mais que les autres utilisent plus que toi ?", "options": ["Ton prénom", "Ton lit", "Ton téléphone", "Ton sac"], "answer": 0}, {"category": "Questions pièges", "question": "Quel mot devient plus court quand on lui ajoute deux lettres ?", "options": ["Long", "Court", "Petit", "Bref"], "answer": 1}, {"category": "Questions pièges", "question": "Avant la découverte de l’Everest, quelle était la plus haute montagne ?", "options": ["K2", "Mont Blanc", "Everest", "Kilimandjaro"], "answer": 2}, {"category": "Questions pièges", "question": "Combien d’animaux de chaque espèce un homme célibataire a-t-il emmenés dans l’arche de Noé ?", "options": ["Deux", "Un", "Aucun", "Quatre"], "answer": 2}, {"category": "Questions pièges", "question": "Que peut-on casser sans le toucher ?", "options": ["Une promesse", "Une assiette", "Un verre", "Une branche"], "answer": 0}, {"category": "Questions pièges", "question": "Plus tu en prends, plus tu en laisses derrière toi. Qu’est-ce que c’est ?", "options": ["Des photos", "Des pas", "Des pièces", "Des livres"], "answer": 1}, {"category": "Culture générale", "question": "Quel est le plus petit nombre premier ?", "options": ["0", "1", "2", "3"], "answer": 2}];
+
+
+let duelState = null;
+let duelTimerId = null;
+let duelSkipCount = 0;
+let lastDuelQuestionText = null;
+const duelRecentOpponents = {};
+function stopDuelTimer(){if(duelTimerId!==null){clearInterval(duelTimerId);duelTimerId=null;}}
+function openDuel(){
+  stopDuelTimer();
+  duelState={stage:"setup",challenger:state.current,opponent:null,question:null,answers:[],seconds:8};
+  $("duelSetup").classList.remove("hidden");$("duelPlay").classList.add("hidden");$("duelResult").classList.add("hidden");
+  $("duelIntro").textContent="Choisis un adversaire. Chaque joueur a huit secondes pour répondre à la même question.";
+  const recent=duelRecentOpponents[state.current]||[];
+  const options=state.players.map((p,i)=>({p,i})).filter(x=>x.i!==state.current);
+  options.sort((a,b)=>Number(recent.includes(a.i))-Number(recent.includes(b.i)));
+  $("duelOpponent").innerHTML=options.map(x=>`<option value="${x.i}">${escapeHtml(x.p.name)}${recent.includes(x.i)?" · déjà défié récemment":""}</option>`).join("");
+  $("duelModal").classList.add("open");
+}
+function beginDuel(){
+  const opponent=Number($("duelOpponent").value);
+  if(!Number.isInteger(opponent)||opponent===state.current||!state.players[opponent])return toast("Choisis un adversaire valide.");
+  duelState.opponent=opponent;
+  const recent=duelRecentOpponents[state.current]||[];recent.push(opponent);duelRecentOpponents[state.current]=recent.slice(-2);
+  const pool=duelQuestions.filter(q=>q.question!==lastDuelQuestionText);
+  duelState.question=pool[Math.floor(Math.random()*pool.length)]||duelQuestions[Math.floor(Math.random()*duelQuestions.length)];
+  duelState.lastQuestion=duelState.question.question;lastDuelQuestionText=duelState.question.question;duelState.stage="play";duelState.turn=0;duelState.answers=[];
+  $("duelSetup").classList.add("hidden");$("duelPlay").classList.remove("hidden");$("duelResult").classList.add("hidden");
+  $("duelQuestion").textContent=duelState.question.question;showDuelTurn();
+}
+function showDuelTurn(){
+  stopDuelTimer();
+  const playerIndex=duelState.turn===0?duelState.challenger:duelState.opponent;
+  const player=state.players[playerIndex];
+  $("duelPlayers").textContent=`${player.name} • ${duelState.turn+1}/2`;
+  $("duelTurnInfo").textContent=`Au tour de ${player.name} : choisis la bonne réponse avant la fin du chrono.`;
+  $("duelTimer").textContent="8 s";
+  $("duelOptions").innerHTML=duelState.question.options.map((option,i)=>`<button class="duel-option" data-answer="${i}">${String.fromCharCode(65+i)}. ${escapeHtml(option)}</button>`).join("");
+  $("duelOptions").querySelectorAll("button").forEach(btn=>btn.addEventListener("click",()=>submitDuelAnswer(Number(btn.dataset.answer),false)));
+  duelState.seconds=8;
+  duelTimerId=setInterval(()=>{duelState.seconds--;$("duelTimer").textContent=`${duelState.seconds} s`;if(duelState.seconds<=0)submitDuelAnswer(-1,true);},1000);
+}
+function submitDuelAnswer(answer,timeout){
+  if(!duelState||duelState.stage!=="play")return;
+  stopDuelTimer();$("duelOptions").querySelectorAll("button").forEach(b=>b.disabled=true);
+  const playerIndex=duelState.turn===0?duelState.challenger:duelState.opponent;
+  duelState.answers.push({player:playerIndex,answer,correct:answer===duelState.question.answer});
+  if(duelState.turn===0){
+    $("duelTurnInfo").textContent=timeout?"Temps écoulé !":"Réponse enregistrée.";
+    setTimeout(()=>{if(duelState&&duelState.stage==="play"){duelState.turn=1;showDuelTurn();}},650);
+  }else setTimeout(finishDuel,450);
+}
+function finishDuel(){
+  stopDuelTimer();if(!duelState)return;duelState.stage="result";
+  const a=duelState.answers[0],b=duelState.answers[1],pA=state.players[duelState.challenger],pB=state.players[duelState.opponent];
+  let title,text;
+  if(a.correct&&!b.correct){pA.score=Math.max(0,Number(pA.score||0)-1);pB.score=Number(pB.score||0)+1;title=`🏆 ${pA.name} remporte le duel !`;text=`Bonne réponse : ${duelState.question.options[duelState.question.answer]}. ${pA.name} récupère 1 point et ${pB.name} reçoit +1 point de malus.`;}
+  else if(b.correct&&!a.correct){pB.score=Math.max(0,Number(pB.score||0)-1);pA.score=Number(pA.score||0)+1;title=`🏆 ${pB.name} remporte le duel !`;text=`Bonne réponse : ${duelState.question.options[duelState.question.answer]}. ${pB.name} récupère 1 point et ${pA.name} reçoit +1 point de malus.`;}
+  else if(a.correct&&b.correct){title="🤝 Égalité parfaite !";text=`Vous avez tous les deux trouvé la bonne réponse : ${duelState.question.options[duelState.question.answer]}. Aucun point ne change.`;}
+  else {title="🤝 Double erreur !";text=`Personne ne marque. La bonne réponse était : ${duelState.question.options[duelState.question.answer]}.`;}
+  $("duelPlay").classList.add("hidden");$("duelResult").classList.remove("hidden");$("duelResultTitle").textContent=title;$("duelResultText").textContent=text;$("duelIntro").textContent="Résultat du Duel éclair";
+  renderGamePlayers();save("game",state);beep(720,.12);
+}
+function closeDuel(){stopDuelTimer();$("duelModal").classList.remove("open");duelState=null;renderGamePlayers();}
+$("duelStart").onclick=beginDuel;
+$("duelSkip").onclick=()=>{
+  if(duelSkipCount>=2)return toast("Limite de deux questions passées atteinte.");
+  duelSkipCount++;stopDuelTimer();
+  const current=duelState&&duelState.question,pool=duelQuestions.filter(q=>q!==current);
+  if(duelState&&pool.length){duelState.question=pool[Math.floor(Math.random()*pool.length)];duelState.lastQuestion=duelState.question.question;lastDuelQuestionText=duelState.question.question;duelState.turn=0;duelState.answers=[];$("duelQuestion").textContent=duelState.question.question;showDuelTurn();}
+};
+$("duelContinue").onclick=()=>{closeDuel();if(state.mode==="fast"&&waiting){state.current=(state.current+1)%state.players.length;nextCard();}};
+
+$("startGame").onclick=()=>{
+  if(state.players.length<2){
+    return toast("Ajoute au moins 2 joueurs.");
+  }
+
+  state.rounds=state.mode==="fast" ? 5 : Math.min(
+    100,
+    Math.max(3,+$("rounds").value||10)
+  );
+  if(state.mode==="fast")$("rounds").value=5;
+  soberUsed=[];
+  duelSkipCount=0;
+  soberRoundDiff=null;soberChallengePair=null;soberChosenKind=null;soberRevealed=false;
+  setSoberUI(false);
+  $("rating").classList.remove("hidden");
+  $("consequence").classList.add("hidden");
+  $("standardGameDéfis express").classList.remove("hidden");
+
+  state.round=0;
+  state.used=[];
+  state.playUsed={};
+  state.lastPlayCardId=null;
+  state.notes=[];
+  state.penalties=0;
+  state.current=0;
+
+  state.players.forEach(p=>{
+    p.score=0;
+    p.penalties=0;
+    p.challenges=0;
+    p.jokers=0;
+    p.notes=[];
+  });
+
+  save("game",state);
+
+  showScreen("game");
+  setSoberUI(false);
+  nextCard(true);
+};
+
+
+/*
+ * Toutes les cartes intégrées ont une référence explicite.
+ * Les cartes personnalisées sont normalisées sans utiliser 5
+ * comme valeur implicite.
+ */
+function deck(){
+  const builtIn=enrichCards(defaultCards);
+
+  const custom=state.custom
+    .map(normalizeCustomCard)
+    .map(c=>[
+      c.category,
+      c.type,
+      c.text,
+      c.target,
+      c.severity
+    ]);
+
+  return [...builtIn,...custom]
+    .filter(c=>state.category==="all"||c[0]===state.category);
+}
+
+
+/*
+ * Les cartes déjà tirées sont maintenant identifiées par leur texte,
+ * plutôt que par l'index d'un tableau filtré.
+ *
+ * Cela évite qu'un changement de catégorie ou l'ajout de cartes
+ * personnalisées rende les indices incohérents.
+ */
+function nextCard(initial=false){
+
+  if(!initial && state.round>=state.rounds){
+    return finish();
+  }
+
+  waiting=false;
+  $("consequence").classList.add("hidden");
+  setSoberUI(false);
+  $("rating").classList.remove("hidden");
+  $("standardGameDéfis express").classList.remove("hidden");
+  soberRoundDiff=null;soberChallengePair=null;soberChosenKind=null;soberRevealed=false;
+
+  if(initial){
+    if(state.round<1)state.round=1;
+  }else{
+    state.round++;
+  }
+
+  let available=deck().filter(c=>!state.used.includes(c[2]));
+
+  if(!available.length){
+    state.used=[];
+    available=deck();
+  }
+
+  if(!available.length){
+    return toast("Aucune carte disponible dans cette catégorie.");
+  }
+
+  const item=available[Math.floor(Math.random()*available.length)];
+
+  currentCard={
+    cat:item[0],
+    type:item[1],
+    text:item[2],
+    target:Number(item[3]),
+    severity:item[4]
+  };
+
+  state.used.push(currentCard.text);
+
+  const card=$("gameCard");
+
+  card.classList.remove("flip");
+  void card.offsetWidth;
+  card.classList.add("flip");
+
+  $("cardNumber").textContent=`Carte ${state.round} / ${state.rounds}`;
+  $("cardType").textContent=currentCard.type.toUpperCase();
+  $("cardSituation").textContent="…"+currentCard.text;
+
+  $("cardRule").textContent=
+    currentCard.type==="joker"
+      ?"JOKER — cette carte annule la conséquence, mais pas les points d’écart."
+      :currentCard.type==="débat"
+        ?"DÉBAT — comparez ensuite les notes."
+        :currentCard.type==="duel"
+          ?"DUEL — deux joueurs peuvent répondre."
+          :currentCard.type==="groupe"
+            ?"GROUPE — tout le monde peut donner une note."
+            :"La référence est révélée après le vote.";
+
+  $("currentPlayerName").textContent=
+    state.players[state.current].name;
+
+  $("roundInfo").textContent=
+    `Tour ${state.round} • ${
+      state.mode==="sober"
+        ?"Sans alcool"
+        :"Mode "+state.mode
+    }`;
+
+  renderGamePlayers();
+  renderRating();
+
+  save("game",state);
+
+  beep(520,.08);
+}
+
+function setSoberUI(active){
+  $("soberControls").classList.toggle("active",active);
+}
+function soberLevelFor(diff){return soberLevels.findIndex(level=>diff>=level.min&&diff<=level.max);}
+function chooseSoberPair(diff){
+ const levelIndex=soberLevelFor(diff);
+ const challenges=[
+  "Cite trois films en dix secondes.",
+  "Fais deviner un animal sans parler.",
+  "Nomme cinq aliments commençant par la même lettre.",
+  "Invente un slogan pour un objet près de toi.",
+  "Raconte une mini-histoire avec trois mots choisis par le groupe.",
+  "Cite quatre pays en huit secondes.",
+  "Fais une publicité de dix secondes pour une chaussette.",
+  "Trouve trois mots qui riment avec « maison ».",
+  "Décris un film connu sans dire son titre.",
+  "Mémorise cinq objets cités par le groupe."
+ ];
+ const first=challenges[Math.floor(Math.random()*challenges.length)];
+ let second=challenges[Math.floor(Math.random()*challenges.length)];
+ while(second===first) second=challenges[Math.floor(Math.random()*challenges.length)];
+ return {levelIndex,action:first,truth:second,actionStyle:null,truthStyle:null};
+}
+function renderSoberResult(diff){
+  soberRoundDiff=diff;soberChallengePair=chooseSoberPair(diff);soberChosenKind=null;soberRevealed=false;
+  const level=soberLevels[soberChallengePair.levelIndex];
+  $("soberKindLabel").textContent="🎯 RÉSULTAT DE LA MANCHE";
+  $("soberCounter").textContent=`Écart réel : ${diff}/10`;
+  $("soberLevel").textContent=level.name;
+  $("soberExplain").textContent=level.desc+" Les deux cartes sont du même niveau.";
+  $("soberActionText").textContent=soberChallengePair.action;
+  $("soberTruthText").textContent=soberChallengePair.truth;
+  $("soberChooseAction").querySelector(".sober-type").textContent="DÉFI EXPRESS"+(soberChallengePair.actionStyle?" · "+styleLabels[soberChallengePair.actionStyle]:"");
+  $("soberChooseTruth").querySelector(".sober-type").textContent="QUESTION BONUS"+(soberChallengePair.truthStyle?" · "+styleLabels[soberChallengePair.truthStyle]:"");
+  $("soberChooseAction").classList.toggle("hidden",!selectedKinds().includes("action"));
+  $("soberChooseTruth").classList.toggle("hidden",!selectedKinds().includes("truth"));
+  $("soberPair").classList.toggle("single-card",selectedKinds().length===1);
+  $("soberPair").classList.remove("sober-result-hidden");
+  $("soberReveal").classList.add("sober-result-hidden");
+  $("soberOther").textContent="🔄 Autres cartes";
+  setSoberUI(true);
+  $("rating").classList.add("hidden");
+  $("standardGameDéfis express").classList.add("hidden");
+  $("consequence").classList.remove("hidden");
+  $("consequence").innerHTML=`<div>🎯 Écart de <strong>${diff}/10</strong> — ${escapeHtml(level.name)}</div><div style="margin-top:8px;font-weight:700">Ta réponse : ${escapeHtml(String(state.notes[state.notes.length-1]?.note ?? "—"))}/10 · Référence : ${escapeHtml(String(state.notes[state.notes.length-1]?.reference ?? "—"))}/10 · Score total : ${state.players[state.current].score} point${state.players[state.current].score!==1?"s":""}</div>`;
+}
+function revealSoberCard(kind){
+  if(!soberChallengePair)return;
+  soberChosenKind=kind;soberRevealed=true;
+  $("soberPair").classList.add("sober-result-hidden");
+  $("soberReveal").classList.remove("sober-result-hidden");
+  const chosenStyle=soberChallengePair[kind+"Style"];
+  $("soberRevealType").textContent=(kind==="action"?"🎭 DÉFI CHOISI":"💬 QUESTION BONUS")+(chosenStyle?" · "+styleLabels[chosenStyle]:"");
+  $("soberRevealText").textContent=soberChallengePair[kind];
+  $("soberKindLabel").textContent=kind==="action"?"⚡ DÉFI EXPRESS":"🧠 QUESTION BONUS";
+  $("soberOther").textContent="🔄 Autre carte du même type";
+  const p=state.players[state.current];p.challenges=Number(p.challenges||0)+1;
+  save("game",state);
+}
+function refreshSoberCard(){
+ if(soberRoundDiff===null)return;
+ soberChallengePair=chooseSoberPair(soberRoundDiff);
+ soberChosenKind=null;soberRevealed=false;
+ $("soberActionText").textContent=soberChallengePair.action;
+ $("soberTruthText").textContent=soberChallengePair.truth;
+ $("soberReveal").classList.add("sober-result-hidden");
+ $("soberPair").classList.remove("sober-result-hidden");
+ $("soberChooseAction").querySelector(".sober-type").textContent="DÉFI EXPRESS";
+ $("soberChooseTruth").querySelector(".sober-type").textContent="QUESTION BONUS";
+ $("soberKindLabel").textContent="🎯 NOUVEAUX DÉFIS";
+}
+
+function advanceSoberPlayer(){
+  if(soberRoundDiff===null)return toast("Attribue d'abord une note pour terminer cette manche.");
+  state.current=(state.current+1)%state.players.length;
+  setSoberUI(false);$("consequence").classList.add("hidden");$("rating").classList.remove("hidden");$("standardGameDéfis express").classList.remove("hidden");
+  waiting=false;soberRoundDiff=null;soberChallengePair=null;soberChosenKind=null;soberRevealed=false;
+  nextCard();
+}
+$("soberChooseAction").onclick=()=>revealSoberCard("action");
+$("soberChooseTruth").onclick=()=>revealSoberCard("truth");
+$("soberOther").onclick=()=>{
+  if(soberRoundDiff===null)return;
+  if(soberRevealed){refreshSoberCard();return;}
+  soberChallengePair=chooseSoberPair(soberRoundDiff);
+  $("soberActionText").textContent=soberChallengePair.action;$("soberTruthText").textContent=soberChallengePair.truth;
+};
+$("soberPass").onclick=advanceSoberPlayer;
+$("soberNextPlayer").onclick=advanceSoberPlayer;
+
+function renderGamePlayers(){
+  $("gamePlayers").innerHTML=state.players.map((p,i)=>`
+    <div class="player-card ${i===state.current&&!waiting?"turn":""}">
+      <span>${i===state.current?"👉 ":""}${escapeHtml(p.name)}</span>
+      <b>${p.score} pt${p.score!==1?"s":""}</b>
+    </div>
+  `).join("");
+}
+
+function renderRating(){
+  $("rating").innerHTML=Array.from(
+    {length:11},
+    (_,n)=>`<button onclick="rate(${n})">${n}</button>`
+  ).join("");
+}
+
+
+/*
+ * ============================================================
+ * VOTE
+ * ============================================================
+ *
+ * C'est ici que le nouveau système est appliqué.
+ *
+ * Score :
+ *
+ *   écart = Math.abs(noteJoueur - référence)
+ *   joueur.score += écart
+ *
+ * Rien d'autre ne peut modifier ce score.
+ *
+ * Les pénalités et les défis sont traités séparément.
+ * ============================================================
+ */
+
+function rate(n){
+
+  if(waiting)return;
+
+  waiting=true;
+
+  const p=state.players[state.current];
+
+  const target=getCardTarget(currentCard);
+  const diff=calculateDifference(n,target);
+
+  /*
+   * Enregistrement de la note donnée.
+   */
+  state.notes.push({
+    player:state.current,
+    note:n,
+    reference:target,
+    difference:diff,
+    round:state.round
+  });
+
+  p.notes.push(n);
+
+  /*
+   * SCORE OFFICIEL :
+   * uniquement l'écart absolu.
+   */
+  p.score=Number(p.score||0)+diff;
+
+  let consequenceText="";
+
+  /*
+   * ----------------------------------------------------------
+   * JOKER
+   * ----------------------------------------------------------
+   *
+   * Le joker n'efface PAS le score.
+   * Il annule uniquement la conséquence.
+   */
+  if(currentCard.type==="joker"){
+
+    p.jokers++;
+
+    consequenceText=
+      `🃏 JOKER : conséquence annulée. `+
+      `Le score reste +${diff} point${diff!==1?"s":""}.`;
+
+  }else if(state.mode==="classic"){
+    consequenceText="✨ Mode classique : aucune pénalité. On continue !";
+  }else if(state.mode==="sober"){
+    consequenceText=`Écart calculé : ${diff}/10. Choisis un défi adapté à ce niveau.`;
+  }else if(state.mode==="fast"){
+    consequenceText=diff>=4
+      ? "⚡ Duel éclair déclenché ! Choisis un adversaire et tente de remporter le duel."
+      : "⚡ Mode rapide : écart enregistré. Un Duel éclair se déclenche à partir de 4 points d’écart.";
+  }else{
+    const penalty=getPenalty(target,n,currentCard.severity);
+    p.penalties+=penalty.count;
+    state.penalties+=penalty.count;
+    consequenceText=penalty.text;
+  }
+
+  /*
+   * Affichage pédagogique du calcul et des conséquences de jeu.
+   */
+  // Les conséquences sont désormais des défis de jeu, jamais des cartes défis de jeu.
+  $("consequence").innerHTML=`
+    <div>${consequenceText}</div>
+    <div style="margin-top:10px;font-weight:700">
+      Ta réponse : ${n}/10
+      · Référence : ${target}/10
+      · Écart : ${diff} point${diff!==1?"s":""}
+      · Score total : ${p.score} point${p.score!==1?"s":""}
+    </div>
+  `;
+
+  $("consequence").classList.remove("hidden");
+
+  beep(n<4?180:650,.12);
+
+  renderGamePlayers();
+  save("game",state);
+  if(state.mode==="sober")renderSoberResult(diff);
+  if(n>=8)confetti();
+  if(state.mode==="fast" && diff>=4){
+    setTimeout(()=>{if(waiting && state.mode==="fast")openDuel();},350);
+  }
+}
+
+
+$("nextCard").onclick=()=>{
+  if(!waiting){
+    return toast("Donne d'abord une note.");
+  }
+
+  state.current=
+    (state.current+1)%state.players.length;
+
+  nextCard();
+};
+
+$("endGame").onclick=finish;
+
+
+function finish(){
+  save("game",state);
+  renderResults();
+  showScreen("results");
+  confetti();
+}
+
+
+/*
+ * ============================================================
+ * RÉSULTATS
+ * ============================================================
+ *
+ * Le classement est strictement croissant sur score.
+ * Le joueur ayant le MOINS de points d'écart est premier.
+ * ============================================================
+ */
+
+function renderResults(){
+
+  const all=state.notes.map(x=>x.note);
+
+  const avg=all.length
+    ?all.reduce((a,b)=>a+b,0)/all.length
+    :0;
+
+  const sorted=[...state.players]
+    .sort((a,b)=>Number(a.score)-Number(b.score));
+
+  const best=sorted[0];
+
+  const totalPoints=state.players
+    .reduce((a,p)=>a+Number(p.score||0),0);
+
+  $("resultStats").innerHTML=`
+    <div class="stat">
+      <span class="muted">Cartes jouées</span>
+      <b>${state.round}</b>
+    </div>
+
+    <div class="stat">
+      <span class="muted">Moyenne des notes</span>
+      <b>${avg.toFixed(1)}/10</b>
+    </div>
+
+    <div class="stat">
+      <span class="muted">Total des points d'écart</span>
+      <b>${totalPoints}</b>
+    </div>
+
+    <div class="stat">
+      <span class="muted">Moins de points = gagnant</span>
+      <b>${best?escapeHtml(best.name):"—"}</b>
+    </div>
+  `;
+
+  $("leaderboard").innerHTML=sorted.map((p,i)=>{
+
+    const av=p.notes.length
+      ?p.notes.reduce((a,b)=>a+b,0)/p.notes.length
+      :0;
+
+    return `
+      <div class="list-item">
+        <span>
+          ${["🥇","🥈","🥉"][i]||"⭐"}
+          ${escapeHtml(p.name)}
+        </span>
+
+        <span>
+          <b>
+            ${p.score}
+            point${p.score!==1?"s":""}
+            d'écart
+          </b>
+          · note moyenne ${av.toFixed(1)}/10
+        </span>
+      </div>
+    `;
+  }).join("");
+
+  drawChart();
+}
+
+
+/*
+ * ============================================================
+ * GRAPHIQUE
+ * ============================================================
+ *
+ * Il représente les points d'écart.
+ *
+ * Une barre basse correspond donc à un meilleur score.
+ * ============================================================
+ */
+
+function drawChart(){
+
+  const c=$("chart");
+  const x=c.getContext("2d");
+
+  const w=c.width=c.clientWidth*2;
+  const h=c.height=c.clientHeight*2;
+
+  x.clearRect(0,0,w,h);
+
+  const vals=state.players.map(p=>Number(p.score||0));
+
+  const max=Math.max(...vals,1);
+  const bw=w/Math.max(vals.length,1);
+
+  x.font="24px system-ui";
+
+  vals.forEach((v,i)=>{
+
+    const bh=(v/max)*(h-45);
+
+    x.fillStyle=
+      getComputedStyle(document.documentElement)
+        .getPropertyValue("--accent");
+
+    x.fillRect(
+      i*bw+4,
+      h-bh-25,
+      bw-8,
+      bh
+    );
+
+    x.fillStyle="#ddd";
+
+    x.fillText(
+      v,
+      i*bw+bw/2-7,
+      h-5
+    );
+  });
+}
+
+
+/*
+ * ============================================================
+ * PARTAGE
+ * ============================================================
+ */
+
+$("shareBtn").onclick=async()=>{
+
+  const classement=[...state.players]
+    .sort((a,b)=>a.score-b.score)
+    .map((p,i)=>
+      `${i+1}. ${p.name} — ${p.score} point${p.score!==1?"s":""} d'écart`
+    )
+    .join("\n");
+
+  const text=
+`🎉 C'EST UN 10 MAIS…
+${state.round} cartes jouées • ${state.players.length} joueurs
+
+Points d'écart — moins = mieux :
+${classement}`;
+
+  if(navigator.share){
+
+    try{
+      await navigator.share({
+        title:"C'est un 10 mais…",
+        text
+      });
+    }catch{}
+
+  }else{
+
+    await navigator.clipboard?.writeText(text);
+    toast("Résumé copié !");
+  }
+};
+
+
+/*
+ * Le bouton rejouer revient simplement à la préparation
+ * afin de conserver exactement le comportement visuel existant.
+ */
+$("replayBtn").onclick=()=>{
+  showScreen("setup");
+};
+
+
+/*
+ * ============================================================
+ * PALETTE / THÈMES
+ * ============================================================
+ */
+
+$("paletteBtn").onclick=()=>
+  $("palette").classList.toggle("open");
+
+document.addEventListener("click",e=>{
+  if(
+    !e.target.closest("#palette") &&
+    !e.target.closest("#paletteBtn")
+  ){
+    $("palette").classList.remove("open");
+  }
+});
+
+
+/*
+ * ============================================================
+ * SON
+ * ============================================================
+ */
+
+$("soundBtn").onclick=()=>{
+  state.sound=!state.sound;
+  $("soundBtn").textContent=state.sound?"🔊":"🔇";
+  save("sound",state.sound);
+};
+
+
+/*
+ * ============================================================
+ * PARAMÈTRES
+ * ============================================================
+ */
+
+$("settingsBtn").onclick=()=>{
+  $("settingsModal").classList.add("open");
+
+  $("defaultMode").value=
+    state.settings.defaultMode||"classic";
+
+  $("animations").value=
+    state.settings.animations;
+
+  $("maxPenalty").value=
+    state.settings.maxPenalty;
+};
+
+function closeSettings(){
+  $("settingsModal").classList.remove("open");
+}
+
+$("saveSettings").onclick=()=>{
+
+  state.settings.defaultMode=
+    $("defaultMode").value;
+
+  state.settings.animations=
+    $("animations").value;
+
+  state.settings.maxPenalty=
+    +$("maxPenalty").value||10;
+
+  save("settings",state.settings);
+
+  closeSettings();
+
+  toast("Paramètres enregistrés");
+};
+
+
+/*
+ * ============================================================
+ * CARTES PERSONNALISÉES
+ * ============================================================
+ *
+ * IMPORTANT :
+ * Number("0") donne bien 0.
+ *
+ * On n'utilise donc surtout pas :
+ *
+ *   value || 5
+ *
+ * car 0 est une valeur parfaitement valide.
+ * ============================================================
+ */
+
+$("saveCustom").onclick=()=>{
+
+  const t=$("customText").value.trim();
+
+  if(!t){
+    return toast("Écris une situation.");
+  }
+
+  const rawTarget=Number($("customTarget").value);
+
+  if(
+    !Number.isFinite(rawTarget) ||
+    rawTarget<0 ||
+    rawTarget>10
+  ){
+    return toast("La référence doit être comprise entre 0 et 10.");
+  }
+
+  const target=Math.round(rawTarget);
+
+  state.custom.push({
+    text:t,
+    category:$("customCat").value,
+    type:$("customType").value,
+    target,
+    severity:$("customSeverity").value
+  });
+
+  save("custom",state.custom);
+
+  $("customText").value="";
+
+  renderCustom();
+
+  toast("Carte ajoutée !");
+};
+
+function renderCustom(){
+
+  $("customList").innerHTML=
+    state.custom.length
+      ?state.custom.map((c,i)=>{
+
+        const normalized=normalizeCustomCard(c);
+
+        return `
+          <div class="list-item">
+            <span>
+              …${escapeHtml(normalized.text)}
+              <small class="muted">
+                (${normalized.type}) · référence ${normalized.target}/10
+              </small>
+            </span>
+
+            <button
+              class="ghost"
+              onclick="deleteCustom(${i})"
+            >
+              🗑️
+            </button>
+          </div>
+        `;
+      }).join("")
+      :"<p class='muted'>Aucune carte personnalisée.</p>";
+}
+
+function deleteCustom(i){
+  state.custom.splice(i,1);
+  save("custom",state.custom);
+  renderCustom();
+}
+
+
+/*
+ * ============================================================
+ * INITIALISATION
+ * ============================================================
+ */
+
+function init(){
+
+  state.theme=load("theme","violet");
+  state.playStyle=state.playStyle||"friends";
+  state.playType=state.playType||"both";
+  state.playUsed=state.playUsed||{};
+
+  state.custom=load("custom",[]);
+
+  /*
+   * Normalisation des anciennes cartes personnalisées.
+   *
+   * Si une ancienne carte ne possède pas de target,
+   * elle reçoit une référence calculée intelligemment,
+   * jamais automatiquement 5.
+   */
+  state.custom=state.custom
+    .map(normalizeCustomCard);
+
+  state.settings=load(
+    "settings",
+    {
+      animations:"on",
+      maxPenalty:10
+    }
+  );
+
+  state.sound=load("sound",true);
+
+  const [a,b]=themes[state.theme]||themes.violet;
+
+  applyTheme(state.theme,a,b);
+
+  $("soundBtn").textContent=
+    state.sound?"🔊":"🔇";
+
+  $("swatches").innerHTML=
+    Object.entries(themes).map(([n,c])=>`
+      <button
+        class="swatch ${n===state.theme?"selected":""}"
+        title="${n}"
+        style="background:linear-gradient(135deg,${c[0]},${c[1]})"
+        onclick="setTheme('${n}')"
+      ></button>
+    `).join("");
+
+  $("customColor").value=a;
+
+  renderPlayers();
+  renderCustom();
+
+  /*
+   * Reprise d'une partie sauvegardée.
+   *
+   * Le système conserve les scores cumulés.
+   * Une nouvelle carte est affichée sans réinitialiser
+   * les scores des joueurs.
+   */
+  $("resumeBtn").onclick=()=>{
+
+    const g=load("game",null);
+
+    if(g&&g.players?.length){
+
+      state=g;
+      state.playStyle=state.playStyle||"friends";
+      state.playType=state.playType||"both";
+      state.playUsed=state.playUsed||{};
+
+      /*
+       * Compatibilité avec les anciennes sauvegardes.
+       */
+      state.players=state.players.map(p=>({
+        name:p.name||"Joueur",
+        score:Number(p.score)||0,
+        penalties:Number(p.penalties)||0,
+        challenges:Number(p.challenges)||0,
+        jokers:Number(p.jokers)||0,
+        notes:Array.isArray(p.notes)?p.notes:[]
+      }));
+
+      state.custom=Array.isArray(state.custom)
+        ?state.custom.map(normalizeCustomCard)
+        :[];
+
+      state.settings=state.settings||{
+        animations:"on",
+        maxPenalty:10
+      };
+
+      state.used=Array.isArray(state.used)
+        ?state.used
+        :[];
+
+      state.notes=Array.isArray(state.notes)
+        ?state.notes
+        :[];
+
+      showScreen("game");
+      setSoberUI(false);
+
+      /*
+       * On reprend avec une nouvelle carte mais les scores
+       * et les statistiques déjà accumulés restent intacts.
+       */
+      nextCard(true);
+
+    }else{
+
+      toast("Aucune partie sauvegardée.");
+
+    }
+  };
+}
+
+
+function setTheme(n){
+
+  const [a,b]=themes[n];
+
+  applyTheme(n,a,b);
+
+  document
+    .querySelectorAll(".swatch")
+    .forEach((x,i)=>
+      x.classList.toggle(
+        "selected",
+        Object.keys(themes)[i]===n
+      )
+    );
+
+  $("customColor").value=a;
+}
+
+$("customColor").oninput=e=>{
+  applyTheme(
+    "custom",
+    e.target.value,
+    "#ec4899"
+  );
+};
+
+
+/*
+ * Démarrage.
+ */
+init();
+
+</script>
+</body>
+</html>
